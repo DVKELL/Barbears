@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+    --color-Vinotinto: #6a0002;
+    --color-Verde-Botella: #003d3a;
+    --color-Mostaza: #f1ad18;
+    --color-Mostaza-Hover: #f7bd40;
+    --color-Verde-Hover: #005752;
+}

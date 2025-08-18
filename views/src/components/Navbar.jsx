@@ -9,11 +9,7 @@ function Navbar() {
     const [registrar, setRegistrar] = useState(false);
 
     function actualizar(metodo, setMetodo) {
-        if (metodo) {
-            setMetodo(false);
-        } else {
-            setMetodo(true);
-        }
+        metodo ? setMetodo(false) : setMetodo(true);
     }
 
     return (

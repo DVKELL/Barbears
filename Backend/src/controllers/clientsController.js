@@ -70,3 +70,14 @@ export const createUser = async (req, res) => {
         return res.send({ err });
     }
 };
+
+//List users
+export const listUsers = async (_, res) => {
+    // const {id} = req.params
+
+    const foundUsers = await Client.find({});
+
+    console.log(foundUsers);
+
+    res.json({ foundUsers });
+};

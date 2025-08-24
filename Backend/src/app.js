@@ -8,6 +8,12 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 
+//Importar Cors
+import cors from "cors";
+
+//Importar Cookie Parser
+import cookieParser from "cookie-parser";
+
 //importar el router
 import router from "./routes/register&loginRoutes.js";
 
@@ -29,10 +35,13 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // para obtener el directorio actual
 
 /* ----------- Middlewares -------------------------- */
+//Permite que las peticiones del origen ingresen
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "public"))); // archivos estáticos
+//Activa el parser del cookies para poder leerlas en req.cookies
+app.use(cookieParser());
 
 //Todas las sesiones necesitan una llave secreta, se configura asi
 app.use(
@@ -44,11 +53,14 @@ app.use(
     })
 );
 
+/* ------------- Rutas Backend ----------*/
 
-// ------------- Rutas Backend ----------
+app.use("/api/v1/health", (_, res) => {
+    res.json({ ok: true, name: "Skol Barber", time: Date.now() });
+});
 app.use("/", router); //Utiliza todas las rutas que esten en el router
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
     console.log(`Conectado al servidor http://localhost:${PORT}`);

@@ -1,40 +1,45 @@
 // Importar mongoose
-import mongoose from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 
 //Definir el modelo para crear las citas
-const appointmentSchema = new mongoose.Schema(
-    {
-        date: { type: Date, require: true },
-        barber: {
-            type: mongoose.Schema.Types.ObjectId, //El id de los barberos
-            ref: "Barbers",
-            require: true,
-        },
-        client: {
-            type: mongoose.Schema.Types.ObjectId, //El id de los clientes
-            ref: "Client", //Esta en users.js
-            require: true,
-        },
-        service: {
-            type: String,
-            enum: [
-                "Corte-Cabello",
-                "Corte-Cabello-Barba",
-                "Trenzas",
-                "Secado-Planchado",
-            ],
-            default: "Corte-Cabello",
-            require: true,
-        },
-        price: { type: Number, require: true },
-        status: {
-            type: String,
-            enum: ["pendiente", "en progreso", "terminado", "anulado"],
-            default: "pendiente",
-        },
+const appointmentSchema = new mongoose.Schema({
+    clientId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    barberId: { type: Schema.Types.ObjectId, ref: "Barber", required: true },
+    serviceId: { type: Schema.Types.ObjectId, ref: "Service", required: true },
+    startAt: { type: Date, required: true },
+    endAdt: { type: Date, required: true },
+    status: {
+        type: String,
+        enum: [
+            "PENDING",
+            "CONFIRMED",
+            "COMPLETED",
+            "CANCELLED",
+            "NO_SHOW",
+            "RESCHEDULED",
+        ],
+        default: "PENDING",
     },
+    origin: { type: String, enum: ["WEB", "ADMIN"], default: "WEB" },
+    rescheduleoff: { type: Schema.Types.ObjectId, ref: "Appointment" },
+    notes: { type: String, trim: true },
+});
 
-    { timestamps: true }
-);
+appointmentSchema.index({ barberId: 1, startAt: 1 }, { unique: true });
+appointmentSchema.index({ clientId: 1, startAt: 1 });
+
+appointmentSchema.pre("validate", function (next) {
+    if (this.startAt >= this.endAdt) {
+        return next(
+            Object.assign(
+                new Error(
+                    "La fecha de comienzo no puede ser mayor a la fecha de finalizacion"
+                ),
+                { status: 422 }
+            )
+        );
+    }
+    next();
+});
 
 export default mongoose.model("Appointments", appointmentSchema);

@@ -1,19 +1,32 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, startSession } from "mongoose";
 
-const barberSchema = new mongoose.Schema(
+//Define el horario de trabajo del barbero
+const WorkHoursSchema = new mongoose.Schema(
     {
-        dni: { type: Number, unique: true, require: true, trim: true },
-        fullName: { type: String, require: true, trim: true },
-        phoneNumber: { type: Number, require: true, unique: true, trim: true },
-        email: { type: String, require: true, unique: true, trim: true },
-        password: { type: String, require: true, trim: true },
-        role: {
-            type: String,
-            enum: ["barber"],
-            default: "barber",
-        },
+        start: { type: String, required: true }, //Ej: 09:00
+        end: { type: String, required: true }, // Ej: 11:00
     },
-    { timestamps: true }
+    { _id: false }
 );
 
-export default mongoose.model("Barbers", barberSchema);
+const BarberSchema = new mongoose.Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        unique: true,
+    },
+    displayName: { type: String, required: true, trim: true },
+    services: [
+        { type: Schema.Types.ObjectId, ref: "Services", required: true },
+    ],
+    bio: { type: String, maxlength: 1000 },
+    avatarUrl: { type: String, trim: true },
+    timezone: { type: String, required }, // ej. 'America/Mexico_City'
+    workDays: [{ type: Number, min: 0, max: 6 }], //Dias que trabaja 0=lunes 6=domingo
+    workHours: { type: WorkHoursSchema, required: true },
+});
+
+BarberSchema.index({ userId: 1 }, { unique: true });
+
+export default mongoose.model("Barber", BarberSchema);

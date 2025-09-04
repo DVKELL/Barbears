@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const ServiceSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true, trim: true },
-    duration: { type: Number, required: true, min: 20, max: 180 }, //minmax equivalente en minutos
+    durationMin: { type: Number, required: true, min: 20, max: 180 }, //minmax equivalente en minutos
     price: { type: Number, required: true, min: 0 },
     isActive: { type: Boolean, default: true },
 });

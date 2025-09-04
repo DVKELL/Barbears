@@ -20,6 +20,6 @@ export async function listAvailabilityRange({barberId, fromISO, toISO}) {
         barberId,
         startAt: {$lt: to},
         endAt: {$gt: from},
-        isblocked: false
+        isBlocked: false
     }).sort({startAt: 1}).lean()
 }

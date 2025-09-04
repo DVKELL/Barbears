@@ -7,7 +7,7 @@ const appointmentSchema = new mongoose.Schema({
     barberId: { type: Schema.Types.ObjectId, ref: "Barber", required: true },
     serviceId: { type: Schema.Types.ObjectId, ref: "Service", required: true },
     startAt: { type: Date, required: true },
-    endAdt: { type: Date, required: true },
+    endAt: { type: Date, required: true },
     status: {
         type: String,
         enum: [
@@ -29,7 +29,7 @@ appointmentSchema.index({ barberId: 1, startAt: 1 }, { unique: true });
 appointmentSchema.index({ clientId: 1, startAt: 1 });
 
 appointmentSchema.pre("validate", function (next) {
-    if (this.startAt >= this.endAdt) {
+    if (this.startAt >= this.endAt) {
         return next(
             Object.assign(
                 new Error(

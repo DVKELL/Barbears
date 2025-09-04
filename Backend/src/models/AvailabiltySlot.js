@@ -4,7 +4,7 @@ const AvailabilitySlotSchema = new mongoose.Schema({
     barberId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     startAt: { type: Date, required: true },
     endAt: { type: Date, required: true },
-    isblocked: { type: Boolean, default: false },
+    isBlocked: { type: Boolean, default: false },
     notes: { type: String, trim: true },
 });
 

@@ -86,6 +86,7 @@ export async function listClientAppointments({ clientId }) {
 
 export async function listBarberAppointments({ barberId, fromISO, toISO }) {
     const id = { barberId };
+    //Obtiene todas las citas en el rango de fechas
     if (fromISO && toISO) {
         id.startAt = { $gte: new Date(fromISO), $lt: new Date(toISO) };
     }

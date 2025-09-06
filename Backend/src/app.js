@@ -24,6 +24,9 @@ import path from "path";
 //Importar las sessiones de express (cookies)
 import session from "express-session";
 
+//Importar Middleware de autenticacion
+import { devAuth } from "./middlewares/devAuth.js";
+
 /* ----------- Conexión a base de datos -------------------------- */
 mongoose
     .connect(process.env.MONGODB_URI)
@@ -36,9 +39,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url)); // para obtener 
 
 /* ----------- Middlewares -------------------------- */
 //Permite que las peticiones del origen ingresen
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+//Usar middleware de autenticacion
+app.use(devAuth);
 
 //Activa el parser del cookies para poder leerlas en req.cookies
 app.use(cookieParser());

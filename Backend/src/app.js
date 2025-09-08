@@ -15,7 +15,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 //importar el router
-import router from "./routes/register&loginRoutes.js";
+import router from "./routes/index.js";
 
 //Para la ruta de los archivos
 import { fileURLToPath } from "url";

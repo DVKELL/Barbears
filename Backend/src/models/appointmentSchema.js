@@ -1,5 +1,5 @@
 // Importar mongoose
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 //Definir el modelo para crear las citas
 const appointmentSchema = new mongoose.Schema({

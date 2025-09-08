@@ -14,19 +14,16 @@ const BarberSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
-        unique: true,
     },
     displayName: { type: String, required: true, trim: true },
-    services: [
-        { type: Schema.Types.ObjectId, ref: "Service", required: true },
-    ],
+    services: [{ type: Schema.Types.ObjectId, ref: "Service", required: true }],
     bio: { type: String, maxlength: 1000 },
     avatarUrl: { type: String, trim: true },
     timezone: { type: String, required: true }, // ej. 'America/Mexico_City'
-    workDays: [{ type: Number, min: 0, max: 6 }], //Dias que trabaja 0=lunes 6=domingo
+    workDays: [{ type: Number, min: 0, max: 6 }], //Dias que trabaja 0=Domingo 6=Sabado
     workHours: { type: WorkHoursSchema, required: true },
 });
 
-BarberSchema.index({ userId: 1 });
+BarberSchema.index({ userId: 1 }, { unique: true });
 
 export default mongoose.model("Barber", BarberSchema);

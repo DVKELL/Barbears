@@ -3,7 +3,6 @@ const router = Router();
 
 import {
     CreateProfile,
-    getBarberProfile,
     listBarbers,
 } from "../Services/barber.service.js";
 

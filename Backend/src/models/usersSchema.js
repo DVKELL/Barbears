@@ -13,16 +13,12 @@ const UserSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
             lowercase: true,
         },
         password: {
             type: String,
             trim: true,
-            required: function () {
-                return this.role === "ADMIN" || this.role === "BARBER";
-            },
         },
         role: {
             type: String,
@@ -46,7 +42,7 @@ UserSchema.pre("save", async function () {
 });
 
 //Crea un index en mongoDB para acelerar las busquedas y asegura que no existan 2 correos iguales
-UserSchema.index({ email: 1 });
+UserSchema.index({ email: 1 }, { unique: true });
 
 //Se exporta by default el modelo Clients que usa el esquema UserSchema
 export default mongoose.model("User", UserSchema);

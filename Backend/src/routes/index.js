@@ -6,6 +6,7 @@ import appointmentsRoutes from "./appointmentsRoutes.js";
 import barberRoutes from "./barberRoutes.js";
 import servicesRoutes from "./servicesRoutes.js";
 import waitlistRoutes from "./waitlistRoutes.js";
+import authRoutes from "./authRoutes.js";
 
 // Prueba para validar si el server esta vivo
 router.get("/health", (_req, res) => {
@@ -15,6 +16,7 @@ router.get("/health", (_req, res) => {
     });
 });
 
+router.use("/auth", authRoutes);
 router.use("/services", servicesRoutes);
 router.use("/barbers", barberRoutes);
 router.use("/waitlist", waitlistRoutes);

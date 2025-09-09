@@ -4,27 +4,28 @@ import {
     listServices,
 } from "../Services/serviceCatalog.service.js";
 
+import asyncH from "../utils/asyncHandler.js";
+
 //Instancia el Router
 const router = Router();
 
 //Listar los servicios activos
-router.get("/", async (_req, res, next) => {
-    try {
+router.get(
+    "/",
+    asyncH(async (_req, res) => {
         res.json(await listServices());
-    } catch (err) {
-        next(err);
-    }
-});
+    })
+);
 
 //Crear un servicio, se coloca como activo de forma automatica
-router.post("/", async (req, res, next) => {
-    try {
+router.post(
+    "/",
+    asyncH(async (req, res) => {
         const created = await createService(req.body);
 
         res.status(201).json(created);
-    } catch (err) {
-        next(err);
-    }
-});
+    })
+);
 
 export default router;
+

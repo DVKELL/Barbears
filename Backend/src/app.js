@@ -17,15 +17,19 @@ import cookieParser from "cookie-parser";
 //importar el router
 import router from "./routes/index.js";
 
-//Para la ruta de los archivos
-import { fileURLToPath } from "url";
-import path from "path";
+/*
+    //Para la ruta de los archivos
+    import { fileURLToPath } from "url";
+    import path from "path";
+*/
 
 //Importar las sessiones de express (cookies)
 import session from "express-session";
 
 //Importar Middleware de autenticacion
 import { devAuth } from "./middlewares/devAuth.js";
+
+import errorHandler from "./middlewares/errorHandler.js";
 
 /* ----------- Conexión a base de datos -------------------------- */
 mongoose
@@ -35,7 +39,9 @@ mongoose
 
 /* ----------- Configuración de Express -------------------------- */
 const app = express();
+/*
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // para obtener el directorio actual
+*/
 
 /* ----------- Middlewares -------------------------- */
 //Permite que las peticiones del origen ingresen
@@ -45,6 +51,7 @@ app.use(express.json());
 
 //Usar middleware de autenticacion
 app.use(devAuth);
+app.use(errorHandler);
 
 //Activa el parser del cookies para poder leerlas en req.cookies
 app.use(cookieParser());
@@ -64,7 +71,8 @@ app.use(
 app.use("/api/v1/health", (_, res) => {
     res.json({ ok: true, name: "Skol Barber", time: Date.now() });
 });
-app.use("/", router); //Utiliza todas las rutas que esten en el router
+//todas las rutas del backend
+app.use("/api/v1", router); //Utiliza todas las rutas que esten en el router
 
 const PORT = process.env.PORT || 4000;
 

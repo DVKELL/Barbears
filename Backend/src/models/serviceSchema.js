@@ -8,6 +8,6 @@ const ServiceSchema = new mongoose.Schema({
 });
 
 //El primer parametro referencia al dato con el cual se creara el index
-ServiceSchema.index({ name: 1 }, {unique: true});
+ServiceSchema.index({ name: 1 }, { unique: true });
 
 export default mongoose.model("Service", ServiceSchema);

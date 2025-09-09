@@ -73,6 +73,5 @@ export const loginClient = async ({ email, password }) => {
 
     const accessToken = signAccess(user);
 
-
     return { user: user.toJSON(), accessToken };
 };

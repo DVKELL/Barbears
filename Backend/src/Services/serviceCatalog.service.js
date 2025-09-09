@@ -6,8 +6,8 @@ export async function listServices() {
 }
 
 //Para crear los servicios:
-export async function createService({ name, duration, price }) {
-    if (!name || !duration || price === null) {
+export async function createService({ name, durationMin, price }) {
+    if (!name || !durationMin || price === null) {
         const err = new Error(
             "El nombre, duración y precio son requeridos obligatoriamente"
         );
@@ -16,5 +16,5 @@ export async function createService({ name, duration, price }) {
     }
 
     //retorna la creacion del documento
-    return ServiceModel.create({ name, duration, price, isActive: true });
+    return ServiceModel.create({ name, durationMin, price, isActive: true });
 }

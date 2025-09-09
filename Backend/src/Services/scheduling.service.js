@@ -4,7 +4,7 @@ import AvailabilityModel from "../models/AvailabiltySlot.js";
 import { addMin } from "../utils/time.js";
 
 //Verifica si el slot de tiempo esta dentro de la disponibilidad del babero
-export async function isWithinAvailability({ barberId, startAt, endAt }) {
+ async function isWithinAvailability({ barberId, startAt, endAt }) {
     const slot = await AvailabilityModel.findOne({
         barberId,
         isBlocked: false,
@@ -17,7 +17,7 @@ export async function isWithinAvailability({ barberId, startAt, endAt }) {
 }
 
 //Verifica si ya existe otro slot o cita que se solape con [startAt, endAt].
-export async function hasClash({ barberId, startAt, endAt }) {
+ async function hasClash({ barberId, startAt, endAt }) {
     const clash = await AvailabilityModel.findOne({
         barberId,
         startAt: { $lte: endAt },

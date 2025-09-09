@@ -1,6 +1,3 @@
-// Importar mongoose
-import mongoose from "mongoose";
-
 import WaitlistEntry from "../models/WaitlistEntrySchema.js";
 
 export async function createEntry({

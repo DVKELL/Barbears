@@ -6,6 +6,8 @@ import {
 
 import asyncH from "../utils/asyncHandler.js";
 
+import authGuard from "../middlewares/authGuard.js";
+
 //Instancia el Router
 const router = Router();
 
@@ -20,6 +22,7 @@ router.get(
 //Crear un servicio, se coloca como activo de forma automatica
 router.post(
     "/",
+    authGuard(["ADMIN"]), //VALIDA SI ES ADMIN
     asyncH(async (req, res) => {
         const created = await createService(req.body);
 
@@ -28,4 +31,3 @@ router.post(
 );
 
 export default router;
-

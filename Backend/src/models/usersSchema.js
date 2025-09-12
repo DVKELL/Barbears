@@ -7,16 +7,16 @@ import mongoose from "mongoose";
 //Se define el esquema de la coleccion
 const UserSchema = new mongoose.Schema(
     {
-        dni: { type: Number, unique: true, required: true, trim: true },
+        dni: { type: String, unique: true, required: true, trim: true },
         fullName: { type: String, required: true, trim: true, maxlength: 120 },
-        phoneNumber: { type: Number, required: true, unique: true, trim: true },
+        phoneNumber: { type: String, required: true, unique: true, trim: true },
         email: {
             type: String,
             required: true,
             trim: true,
             lowercase: true,
         },
-        password: {
+        passwordHash: {
             type: String,
             trim: true,
             required: true,
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema(
 UserSchema.pre("save", async function () {
     //Si la contraseña se crea o se modifica
     if (this.isModified("password")) {
-        this.password = await bcrypt.hash(this.password, 10); //Entonces esa contraseña se va a encriptar
+        this.passwordHash = await bcrypt.hash(this.passwordHash, 10); //Entonces esa contraseña se va a encriptar
     }
 });
 

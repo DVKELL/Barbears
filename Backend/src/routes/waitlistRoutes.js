@@ -15,7 +15,7 @@ router.post(
 
 //Listar la lista de espera
 router.get(
-    "/",
+    "/me",
     asyncH(async (req, res) => {
         const clientId = req.user?._id || req.body.clientId;
         res.json(await lisitMyEntries({ clientId }));

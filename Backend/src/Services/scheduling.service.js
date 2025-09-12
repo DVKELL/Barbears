@@ -3,8 +3,10 @@ import ServiceModel from "../models/serviceSchema.js";
 import AvailabilityModel from "../models/AvailabiltySlot.js";
 import { addMin } from "../utils/time.js";
 
+const MIN_HOURS = Number(process.env.CANCEL_MIN_HOURS || 2);
+
 //Verifica si el slot de tiempo esta dentro de la disponibilidad del babero
- async function isWithinAvailability({ barberId, startAt, endAt }) {
+async function isWithinAvailability({ barberId, startAt, endAt }) {
     const slot = await AvailabilityModel.findOne({
         barberId,
         isBlocked: false,
@@ -17,7 +19,7 @@ import { addMin } from "../utils/time.js";
 }
 
 //Verifica si ya existe otro slot o cita que se solape con [startAt, endAt].
- async function hasClash({ barberId, startAt, endAt }) {
+async function hasClash({ barberId, startAt, endAt }) {
     const clash = await AvailabilityModel.findOne({
         barberId,
         startAt: { $lte: endAt },
@@ -30,6 +32,33 @@ import { addMin } from "../utils/time.js";
 
     return !!clash;
 }
+
+const assertCanManage = (appt, user, action = "manage") => {
+    const isClient =
+        user?.role === "CLIENT" && appt.clientId.toString() === user.id;
+    const isBarber =
+        user?.role === "BARBER" && appt.barberId.toString() === user.id;
+    const isAdmin = user?.role === "ADMIN";
+
+    if (!(isClient || isBarber || isAdmin)) {
+        const err = new Error(`No autorizado para ${action} esta cita`);
+        err.status = 403;
+        throw err;
+    }
+};
+
+const assertInAdvance = (startAt) => {
+    const now = new Date();
+    const diffH = startAt.getTime() - now.getTime() / 36e5;
+
+    if (diffH < MIN_HOURS) {
+        const err = new Error(
+            `Debe ser con al menos ${MIN_HOURS} de anticipacion`
+        );
+        err.status = 409;
+        throw err;
+    }
+};
 
 export async function createAppointment({
     clientId,
@@ -79,6 +108,124 @@ export async function createAppointment({
 
     return appt;
 }
+
+export const cancelAppointment = async ({ id, user }) => {
+    const appt = await AppointmentModel.findById(id);
+    if (!appt) {
+        const err = new Error(`Cita no encontrada`);
+        err.status = 404;
+        throw err;
+    }
+
+    assertCanManage(appt, user, "cancelar");
+    assertInAdvance(appt.startAt);
+
+    //Si la cita tiene cualquiera de estos estatus, no se puede cancelar
+    if (["CANCELLED", "COMPLETED", "NO_SHOW"].includes(appt.status)) {
+        const err = new Error(
+            `La cita no puede cancelarse en su estado actual`
+        );
+        err.status = 409;
+        throw err;
+    }
+
+    appt.status = "CANCELLED;";
+
+    await appt.save();
+
+    //Retorna el id de la cita cancelada
+    return { cancelled: true, id: appt._id };
+};
+
+export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
+    const appt = await AppointmentModel.findById(id);
+    if (!appt) {
+        const err = new Error(`Cita no encontrada`);
+        err.status = 404;
+        throw err;
+    }
+
+    assertCanManage(appt, user, "reprogramar");
+    assertInAdvance(appt.startAt);
+
+    const service = await ServiceModel.findById(appt.serviceId).lean();
+    const newStartAt = new Date(newStartAtISO);
+    const newEndAt = addMin(newStartAt, service.durationMin);
+
+    //Valida si esta en el horario del barbero
+    const ok = await isWithinAvailability({
+        barberId: appt.barberId,
+        startAt: newEndAt,
+        endAt: newEndAt,
+    });
+    if (!ok) {
+        const err = new Error(`Nueva hora fuera de disponibilidad`);
+        err.status = 409;
+        throw err;
+    }
+
+    //Valida si la hora no esta ocupada
+    const busy = await hasClash({
+        barberId: appt.barberId,
+        startAt: newStartAt,
+        endAt: newEndAt,
+        excludeId: appt._id,
+    });
+    if (!ok) {
+        const err = new Error(`Nueva hora ocupada`);
+        err.status = 409;
+        throw err;
+    }
+
+    // marcar original y crear nueva
+    appt.status = "RESCHEDULED";
+    await appt.save();
+
+    //Crea la nueva cita
+    const newAppt = await AppointmentModel.create({
+        clientId: appt.clientId,
+        barberId: appt.barberId,
+        serviceId: appt.serviceId,
+        startAt: newStartAt,
+        endAt: newEndAt,
+        status: process.env.AUTO_CONFIRM === "1" ? "CONFIRMED" : "PENDING",
+        origin: "WEB",
+        rescheduleOf: appt._id,
+    });
+
+    return newAppt; //Se puede poner el JSON para validar
+};
+
+export const confirmAppointment = async ({ id, user }) => {
+    const appt = await AppointmentModel.findById(id);
+    if (!appt) {
+        const err = new Error(`Cita no encontrada`);
+        err.status = 443;
+        throw err;
+    }
+
+    const isBarber =
+        user?.role === "BARBER" && appt.barberId.toString() === user.id;
+    const isAdmin = user?.role === "ADMIN";
+
+    if (!(isBarber || isAdmin)) {
+        const err = new Error(`No autorizado para confirmar`);
+        err.status = 403;
+        throw err;
+    }
+    if (appt.status !== "PENDING") {
+        const err = new Error(
+            `Solo se pueden confirmar citas en status PENDIENTE`
+        );
+        err.status = 409;
+        throw err;
+    }
+
+    appt.status = "CONFIRMED";
+    await appt.save();
+
+    return appt.toJSON();
+};
 
 export async function listClientAppointments({ clientId }) {
     return AppointmentModel.find({ clientId }).sort({ startAt: -1 }).lean();

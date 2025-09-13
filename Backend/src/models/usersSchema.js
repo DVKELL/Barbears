@@ -1,3 +1,5 @@
+//MODELO BASICO DE USUARIOS
+
 //Librebria para encriptar
 import bcrypt from "bcrypt";
 
@@ -16,16 +18,20 @@ const UserSchema = new mongoose.Schema(
             trim: true,
             lowercase: true,
         },
+
+        //Contraseña ya encriptada
         passwordHash: {
             type: String,
             trim: true,
             required: true,
         },
+
+        //asi se definen los roles posibles dentro de cada coleccion
         role: {
             type: String,
             enum: ["CLIENT", "BARBER", "ADMIN"],
             default: "CLIENT",
-        }, //asi se definen los roles posibles dentro de cada bbdd
+        },
         isActive: { type: Boolean, default: true },
     },
     { timestamps: true }
@@ -37,7 +43,7 @@ const UserSchema = new mongoose.Schema(
 //El primer parametro dice lo que se va a hacer, en este caso 'save'
 UserSchema.pre("save", async function () {
     //Si la contraseña se crea o se modifica
-    if (this.isModified("password")) {
+    if (this.isModified("passwordHash")) {
         this.passwordHash = await bcrypt.hash(this.passwordHash, 10); //Entonces esa contraseña se va a encriptar
     }
 });

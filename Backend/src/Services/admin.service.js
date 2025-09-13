@@ -29,7 +29,7 @@ export const createUser = async ({
         fullName,
         phoneNumber,
         email,
-        password,
+        passwordHash,
         role,
     });
 

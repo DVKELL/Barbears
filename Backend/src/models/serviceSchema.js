@@ -1,13 +1,22 @@
+//SERVICIOS
+
 import mongoose from "mongoose";
 
 const ServiceSchema = new mongoose.Schema({
+    //Nombre del servicio
     name: { type: String, required: true, trim: true },
-    durationMin: { type: Number, required: true, min: 10, max: 180 }, //minmax equivalente en minutos
+
+    //Duracion del servicio en minutos
+    durationMin: { type: Number, required: true, min: 10, max: 180 },
+
+    //Precio del servicio
     price: { type: Number, required: true, min: 0 },
+
+    //Si esta activo o no
     isActive: { type: Boolean, default: true },
 });
 
-//El primer parametro referencia al dato con el cual se creara el index
+//Asegura que el nombre del servicio sea unico
 ServiceSchema.index({ name: 1 }, { unique: true });
 
 export default mongoose.model("Service", ServiceSchema);

@@ -1,10 +1,19 @@
-import mongoose, { mongo, Schema, Types } from "mongoose";
+//ESPACIOS DE DISPONIBILIDAD
+
+import mongoose, { Schema } from "mongoose";
 
 const AvailabilitySlotSchema = new mongoose.Schema({
+    //Referencia al barbero
     barberId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+
+    //Comienzo y final del bloque de disponibilidad
     startAt: { type: Date, required: true },
     endAt: { type: Date, required: true },
+
+    //Si esta bloqueado o no el bloque de disponibilidad
     isBlocked: { type: Boolean, default: false },
+
+    //Notas
     notes: { type: String, trim: true },
 });
 

@@ -171,7 +171,7 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
         endAt: newEndAt,
         excludeId: appt._id,
     });
-    if (!ok) {
+    if (!busy) {
         const err = new Error(`Nueva hora ocupada`);
         err.status = 409;
         throw err;

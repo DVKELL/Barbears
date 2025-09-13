@@ -1,3 +1,5 @@
+//BARBEROS
+
 import mongoose, { Schema } from "mongoose";
 
 //Define el horario de trabajo del barbero
@@ -10,17 +12,33 @@ const WorkHoursSchema = new mongoose.Schema(
 );
 
 const BarberSchema = new mongoose.Schema({
+    //Referencia al usuario Base
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
+
+    //Nombre que se mostrara al publico
     displayName: { type: String, required: true, trim: true },
+
+    //Servicios que ofrece
     services: [{ type: Schema.Types.ObjectId, ref: "Service", required: true }],
+
+    //Biografia y/o descripcion
     bio: { type: String, maxlength: 1000 },
+
+    //Link de la foto
     avatarUrl: { type: String, trim: true },
-    timezone: { type: String, required: true }, // ej. 'America/Mexico_City'
-    workDays: [{ type: Number, min: 0, max: 6 }], //Dias que trabaja 0=Domingo 6=Sabado
+
+    //Define la hora en la que va a trabajar
+    // ej. 'America/Caracas'
+    timezone: { type: String, required: true },
+
+    //Dias que trabaja 0=Domingo 6=Sabado
+    workDays: [{ type: Number, min: 0, max: 6 }],
+
+    //Horas que trabaja
     workHours: { type: WorkHoursSchema, required: true },
 });
 

@@ -6,6 +6,9 @@ import {
     refreshFromToken,
 } from "../Services/auth.service.js";
 
+import { body } from "express-validator";
+import { validate } from "../middlewares/validate.js";
+
 const router = Router();
 
 const setRefreshCookie = (res, token) => {
@@ -21,6 +24,20 @@ const setRefreshCookie = (res, token) => {
 
 router.post(
     "/register",
+    validate([
+        body("name")
+            .trim()
+            .isLength({ min: 2, max: 80 })
+            .withMessage("Nombre de 2 a 80 caracteres"),
+        body("email")
+            .trim()
+            .isEmail()
+            .withMessage("Correo inválido")
+            .normalizeEmail(),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("contraseña mínimo 6"),
+    ]),
     asyncH(async (req, res) => {
         const result = await registerClient(req.body);
         res.status(201).json(result);
@@ -29,6 +46,16 @@ router.post(
 
 router.post(
     "/login",
+    validate([
+        body("email")
+            .trim()
+            .isEmail()
+            .withMessage("Correo inválido")
+            .normalizeEmail(),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("contraseña mínimo 6"),
+    ]),
     asyncH(async (req, res) => {
         const result = await loginClient(req.body);
         res.json(result);
@@ -38,6 +65,13 @@ router.post(
 //Refresca el Token
 router.post(
     "/refresh",
+    validate([
+        // opcional body.refreshToken para pruebas (normalmente viene en cookie)
+        body("refreshToken")
+            .optional()
+            .isString()
+            .withMessage("refreshToken string"),
+    ]),
     asyncH(async (req, res) => {
         const rt = req.cookies?.refreshToken || req.body?.refreshToken; // body solo para pruebas
         const { user, accessToken, refreshToken } = await refreshFromToken(rt);

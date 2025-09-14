@@ -32,7 +32,7 @@ async function hasClash({ barberId, startAt, endAt, excludeId }) {
 
     if (excludeId) comparation._id = { $ne: excludeId };
 
-    const clash = await Appointment.findOne(q).lean();
+    const clash = await Appointment.findOne(comparation).lean();
 
     return !!clash;
 }
@@ -210,7 +210,7 @@ export const confirmAppointment = async ({ id, user }) => {
     const appt = await Appointment.findById(id);
     if (!appt) {
         const err = new Error(`Cita no encontrada`);
-        err.status = 443;
+        err.status = 404;
         throw err;
     }
 

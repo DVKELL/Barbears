@@ -60,4 +60,4 @@ appointmentSchema.pre("validate", function (next) {
     next();
 });
 
-export default mongoose.model("Appointments", appointmentSchema);
+export default mongoose.model("Appointment", appointmentSchema);

@@ -1,7 +1,7 @@
-import BarberProfile from "../models/barberSchema.js";
+import Barber from "../models/barberSchema.js";
 import UserModel from "../models/usersSchema.js";
 
-export async function CreateProfile({
+export async function createProfile({
     userId,
     displayName,
     services,
@@ -17,7 +17,7 @@ export async function CreateProfile({
         throw err;
     }
 
-    return BarberProfile.create({
+    return Barber.create({
         userId,
         displayName,
         services,
@@ -29,7 +29,7 @@ export async function CreateProfile({
 
 export async function listBarbers() {
     //Trae todos los barberos que esten en la BBDD solo con los campos indicados en el select
-    return BarberProfile.find({})
+    return Barber.find({})
         .select(
             "displayName services timezone workDays workHours avatarUrl userId"
         )
@@ -38,5 +38,5 @@ export async function listBarbers() {
 
 //Trae un perfil de barbero en especifico
 export async function getBarberProfile(id) {
-    return BarberProfile.find(id).lean();
+    return Barber.findById(id).lean();
 }

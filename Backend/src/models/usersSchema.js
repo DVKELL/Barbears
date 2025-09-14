@@ -1,7 +1,7 @@
 //MODELO BASICO DE USUARIOS
 
 //Librebria para encriptar
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 
 //Importar mongoose
 import mongoose from "mongoose";
@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-//Encriptar la password
+/**Encriptar la password
 
 //pre es para realizar algo antes del primer parametro
 //El primer parametro dice lo que se va a hacer, en este caso 'save'
@@ -47,6 +47,7 @@ UserSchema.pre("save", async function () {
         this.passwordHash = await bcrypt.hash(this.passwordHash, 10); //Entonces esa contraseña se va a encriptar
     }
 });
+*/
 
 //Crea un index en mongoDB para acelerar las busquedas y asegura que no existan 2 correos iguales
 UserSchema.index({ email: 1 }, { unique: true });

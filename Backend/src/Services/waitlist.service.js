@@ -1,24 +1,24 @@
-import WaitlistEntrySchema from "../models/WaitlistEntrySchema.js";
+import WaitlistEntry from "../models/WaitlistEntrySchema.js";
 
 const ACTIVE_STATUSES = ["OPEN", "NOTIFIED"];
 
 export async function createEntry({ clientId, barberId, serviceId, dateKey }) {
-    if (!clientId || !barberId || !serviceId || !dateKey) {
+    if (!clientId || !barberId || !dateKey) {
         const err = new Error(
-            "Los campos, clientId, barberId y serviceId son requeridos"
+            "Los campos, clientId, barberId y dateKey son requeridos"
         );
         err.status = 422;
         throw err;
     }
 
     //Para validar si ya posee una cita con ese barbero para ese dia
-    const exists = await WaitlistEntrySchema.findOne({
+    const exists = await WaitlistEntry.findOne({
         clientId,
         barberId,
         dateKey,
         status: { $in: ACTIVE_STATUSES },
-        ...(serviceId ? { serviceId } : {}).lean(),
-    });
+        ...(serviceId ? { serviceId } : {}),
+    }).lean();
 
     if (exists) {
         const err = new Error(
@@ -28,7 +28,8 @@ export async function createEntry({ clientId, barberId, serviceId, dateKey }) {
         throw err;
     }
 
-    return WaitlistEntrySchema.create({
+    //Retorno la creacion de una nueva entrada
+    return WaitlistEntry.create({
         clientId,
         barberId,
         serviceId,
@@ -37,8 +38,9 @@ export async function createEntry({ clientId, barberId, serviceId, dateKey }) {
     });
 }
 
-export async function lisitMyEntries({ clientId }) {
-    return WaitlistEntrySchema.find({ clientId })
+export async function listMyEntries({ clientId }) {
+    //Retorna las entradas de espera que tiene un cliente en especifico
+    return WaitlistEntry.find({ clientId })
         .sort({ createdAt: -1 })
         .lean();
 }
@@ -79,7 +81,6 @@ export const countForBarberDay = async ({ barberId, dateKey }) => {
 
 // Desglose por servicio (barbero + día)
 export const summaryForBarberDay = async ({ barberId, dateKey }) => {
-    
     //Esto no se que hace
     const rows = await WaitlistEntry.aggregate([
         { $match: { barberId, dateKey, status: { $in: ACTIVE_STATUSES } } },

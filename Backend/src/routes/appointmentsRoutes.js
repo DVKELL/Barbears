@@ -75,7 +75,7 @@ router.get(
 
 router.patch(
     "/:id/cancel",
-    authGuard(["CLIENTE", "ADMIN", "BARBER"]),
+    authGuard(["CLIENT", "ADMIN", "BARBER"]),
     validate([param("id").isMongoId().withMessage("id inválido")]),
     asyncH(async (req, res) => {
         const result = await cancelAppointment({
@@ -105,7 +105,7 @@ router.patch(
 
 router.patch(
     "/:id/confirm",
-    authGuard(["BARBERO", "ADMIN"]),
+    authGuard(["BARBER", "ADMIN"]),
     validate([param("id").isMongoId().withMessage("id inválido")]),
     asyncH(async (req, res) => {
         const appt = await confirmAppointment({

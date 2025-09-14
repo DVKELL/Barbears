@@ -4,7 +4,7 @@ const router = Router();
 
 //Funciones de barberos
 import {
-    CreateProfile,
+    createProfile,
     listBarbers,
     getBarberProfile,
 } from "../Services/barber.service.js";
@@ -30,7 +30,7 @@ const hhmm = /^([01]\d|2[0-3]):([0-5]\d)$/;
 //Crear perfil de barbero
 router.post(
     "/profiles",
-    authGuard(["ADMIN", "BARBERO"]),
+    authGuard(["ADMIN", "BARBER"]),
     validate([
         body("userId").isMongoId().withMessage("userId inválido"),
         body("displayName")
@@ -87,7 +87,7 @@ router.get(
 //Publicar Availability
 router.post(
     "/availability",
-    authGuard(["BARBERO", "ADMIN"]),
+    authGuard(["BARBER", "ADMIN"]),
     validate([
         body("barberId").isMongoId().withMessage("barberId inválido"),
         body("startAtISO")

@@ -1,5 +1,5 @@
 import User from "../models/usersSchema.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export const createUser = async ({
     dni,
@@ -11,14 +11,21 @@ export const createUser = async ({
 }) => {
     if (!dni || !fullName || !phoneNumber || !email || !password) {
         const err = new Error("Todos los datos son requeridos");
-        err.status = 500;
+        err.status = 422;
         throw err;
     }
 
-    const exists = await User.findOne({dni});
+    const exists = await User.findOne({ dni });
     if (exists) {
         const err = new Error("El usuario ya se encuentra registrado");
-        err.status = 500;
+        err.status = 409;
+        throw err;
+    }
+
+    const existsEmail = await User.findOne({ email });
+    if (existsEmail) {
+        const err = new Error("El usuario ya se encuentra registrado");
+        err.status = 409;
         throw err;
     }
 

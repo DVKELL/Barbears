@@ -1,13 +1,13 @@
-import AppointmentModel from "../models/appointmentSchema.js";
-import ServiceModel from "../models/serviceSchema.js";
-import AvailabilityModel from "../models/AvailabiltySlot.js";
+import Appointment from "../models/appointmentSchema.js";
+import Service from "../models/serviceSchema.js";
+import AvailabilitySlot from "../models/AvailabilitySlot.js";
 import { addMin } from "../utils/time.js";
 
 const MIN_HOURS = Number(process.env.CANCEL_MIN_HOURS || 2);
 
 //Verifica si el slot de tiempo esta dentro de la disponibilidad del babero
 async function isWithinAvailability({ barberId, startAt, endAt }) {
-    const slot = await AvailabilityModel.findOne({
+    const slot = await AvailabilitySlot.findOne({
         barberId,
         isBlocked: false,
         startAt: { $lte: startAt },
@@ -19,16 +19,20 @@ async function isWithinAvailability({ barberId, startAt, endAt }) {
 }
 
 //Verifica si ya existe otro slot o cita que se solape con [startAt, endAt].
-async function hasClash({ barberId, startAt, endAt }) {
-    const clash = await AvailabilityModel.findOne({
+async function hasClash({ barberId, startAt, endAt, excludeId }) {
+    const comparation = {
         barberId,
-        startAt: { $lte: endAt },
-        endAt: { $gte: startAt },
-        /*LOGICA CENTRAL:
-        LOS INTERVALOS SE SOLAPAN SI:
-        nuevoStart < existenteFinal   &&   nuevoFinal > existenteStart 
-        Si esto da true, es que hay solapamiento*/
-    }).lean();
+        startAt: { $lt: endAt },
+        endAt: { $gt: startAt },
+    };
+    /*LOGICA CENTRAL:
+    LOS INTERVALOS SE SOLAPAN SI:
+    nuevoStart < existenteFinal   &&   nuevoFinal > existenteStart 
+    Si esto da true, es que hay solapamiento*/
+
+    if (excludeId) comparation._id = { $ne: excludeId };
+
+    const clash = await Appointment.findOne(q).lean();
 
     return !!clash;
 }
@@ -49,7 +53,7 @@ const assertCanManage = (appt, user, action = "manage") => {
 
 const assertInAdvance = (startAt) => {
     const now = new Date();
-    const diffH = startAt.getTime() - now.getTime() / 36e5;
+    const diffH = (startAt.getTime() - now.getTime()) / 36e5;
 
     if (diffH < MIN_HOURS) {
         const err = new Error(
@@ -66,7 +70,7 @@ export async function createAppointment({
     serviceId,
     startAtISO,
 }) {
-    const service = await ServiceModel.findById(serviceId).lean();
+    const service = await Service.findById(serviceId).lean();
     if (!service) {
         const err = new Error("Servicio inválido");
         err.status = 400;
@@ -96,7 +100,7 @@ export async function createAppointment({
     }
 
     //Crea la cita
-    const appt = await AppointmentModel.create({
+    const appt = await Appointment.create({
         clientId,
         barberId,
         serviceId,
@@ -110,7 +114,7 @@ export async function createAppointment({
 }
 
 export const cancelAppointment = async ({ id, user }) => {
-    const appt = await AppointmentModel.findById(id);
+    const appt = await Appointment.findById(id);
     if (!appt) {
         const err = new Error(`Cita no encontrada`);
         err.status = 404;
@@ -129,7 +133,7 @@ export const cancelAppointment = async ({ id, user }) => {
         throw err;
     }
 
-    appt.status = "CANCELLED;";
+    appt.status = "CANCELLED";
 
     await appt.save();
 
@@ -138,7 +142,7 @@ export const cancelAppointment = async ({ id, user }) => {
 };
 
 export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
-    const appt = await AppointmentModel.findById(id);
+    const appt = await Appointment.findById(id);
     if (!appt) {
         const err = new Error(`Cita no encontrada`);
         err.status = 404;
@@ -148,14 +152,14 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
     assertCanManage(appt, user, "reprogramar");
     assertInAdvance(appt.startAt);
 
-    const service = await ServiceModel.findById(appt.serviceId).lean();
+    const service = await Service.findById(appt.serviceId).lean();
     const newStartAt = new Date(newStartAtISO);
     const newEndAt = addMin(newStartAt, service.durationMin);
 
     //Valida si esta en el horario del barbero
     const ok = await isWithinAvailability({
         barberId: appt.barberId,
-        startAt: newEndAt,
+        startAt: newStartAt,
         endAt: newEndAt,
     });
     if (!ok) {
@@ -171,9 +175,15 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
         endAt: newEndAt,
         excludeId: appt._id,
     });
-    if (!busy) {
+    if (busy) {
         const err = new Error(`Nueva hora ocupada`);
         err.status = 409;
+        throw err;
+    }
+
+    if (!appt) {
+        const err = new Error("Cita no encontrada");
+        err.status = 404;
         throw err;
     }
 
@@ -182,7 +192,7 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
     await appt.save();
 
     //Crea la nueva cita
-    const newAppt = await AppointmentModel.create({
+    const newAppt = await Appointment.create({
         clientId: appt.clientId,
         barberId: appt.barberId,
         serviceId: appt.serviceId,
@@ -197,7 +207,7 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
 };
 
 export const confirmAppointment = async ({ id, user }) => {
-    const appt = await AppointmentModel.findById(id);
+    const appt = await Appointment.findById(id);
     if (!appt) {
         const err = new Error(`Cita no encontrada`);
         err.status = 443;
@@ -228,7 +238,7 @@ export const confirmAppointment = async ({ id, user }) => {
 };
 
 export async function listClientAppointments({ clientId }) {
-    return AppointmentModel.find({ clientId }).sort({ startAt: -1 }).lean();
+    return Appointment.find({ clientId }).sort({ startAt: -1 }).lean();
 }
 
 export async function listBarberAppointments({ barberId, fromISO, toISO }) {
@@ -238,5 +248,5 @@ export async function listBarberAppointments({ barberId, fromISO, toISO }) {
         id.startAt = { $gte: new Date(fromISO), $lt: new Date(toISO) };
     }
 
-    return AppointmentModel.find(id).sort({ startAt: 1 }).lean();
+    return Appointment.find(id).sort({ startAt: 1 }).lean();
 }

@@ -6,7 +6,7 @@ import authGuard from "../middlewares/authGuard.js";
 import { validate } from "../middlewares/validate.js";
 import { body, query, param } from "express-validator";
 
-import { createEntry, lisitMyEntries } from "../Services/waitlist.service.js";
+import { createEntry, listMyEntries } from "../Services/waitlist.service.js";
 
 //Crear una entrada (para el cliente)
 router.post(
@@ -33,14 +33,14 @@ router.get(
     authGuard(["CLIENT"]),
     asyncH(async (req, res) => {
         const clientId = req.user?._id || req.body.clientId;
-        res.json(await lisitMyEntries({ clientId }));
+        res.json(await listMyEntries({ clientId }));
     })
 );
 
 // Cancelar mi entrada
 router.delete(
     "/:id",
-    authGuard(["CLIENTE", "ADMIN"]),
+    authGuard(["CLIENT", "ADMIN"]),
     validate([param("id").isMongoId().withMessage("id inválido")]),
     asyncH(async (req, res) => {
         await deleteEntry({ id: req.params.id, clientId: req.user.id });

@@ -1,13 +1,13 @@
-import ServiceModel from "../models/serviceSchema.js";
+import Service from "../models/serviceSchema.js";
 
 //Lista todos los servicios activos
 export async function listServices() {
-    return ServiceModel.find({ isActive: true }).lean();
+    return Service.find({ isActive: true }).lean();
 }
 
 //Para crear los servicios:
 export async function createService({ name, durationMin, price }) {
-    if (!name || !durationMin || price === null) {
+    if (!name || !durationMin || price == null) {
         const err = new Error(
             "El nombre, duración y precio son requeridos obligatoriamente"
         );
@@ -16,5 +16,5 @@ export async function createService({ name, durationMin, price }) {
     }
 
     //retorna la creacion del documento
-    return ServiceModel.create({ name, durationMin, price, isActive: true });
+    return Service.create({ name , durationMin, price, isActive: true });
 }

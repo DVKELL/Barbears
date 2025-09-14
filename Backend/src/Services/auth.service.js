@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/usersSchema.js";
 
@@ -7,7 +7,7 @@ const signAccess = (user) => {
     const payload = {
         sub: user._id.toString(),
         role: user.role,
-        name: user.name,
+        name: user.fullName,
     };
     const ttl = `${process.env.ACCESS_TOKEN_TTL_MIN || 15}m`;
 
@@ -15,16 +15,13 @@ const signAccess = (user) => {
 };
 
 //Token de larga duracion (dias)
-const singRefresh = (user) => {
-    const payload = {
-        sub: user._id.toString(),
-        tokenType: "refresh",
-    };
+const signRefresh = (user) => {
     const days = Number(process.env.REFRESH_TOKEN_TTL_DAYS || 7);
-
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_TTL_DAYS, {
-        expiresIn: `${days}`,
-    });
+    return jwt.sign(
+        { sub: user._id.toString(), tokenType: "refresh" },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: `${days}d` }
+    );
 };
 
 export const registerClient = async ({
@@ -48,6 +45,7 @@ export const registerClient = async ({
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+
     const user = await User.create({
         email,
         passwordHash,
@@ -58,8 +56,9 @@ export const registerClient = async ({
     });
 
     const accessToken = signAccess(user);
+    const refreshToken = signRefresh(user);
 
-    return { user: user.toJSON(), accessToken };
+    return { user: user.toJSON(), accessToken, refreshToken };
 };
 
 export const loginClient = async ({ email, password }) => {
@@ -84,8 +83,9 @@ export const loginClient = async ({ email, password }) => {
     }
 
     const accessToken = signAccess(user);
+    const refreshToken = signRefresh(user);
 
-    return { user: user.toJSON(), accessToken };
+    return { user: user.toJSON(), accessToken, refreshToken };
 };
 
 export const refreshFromToken = async (refreshToken) => {
@@ -95,7 +95,7 @@ export const refreshFromToken = async (refreshToken) => {
         throw err;
     }
 
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN);
+    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
     if (payload.tokenType !== "refresh") {
         const err = new Error("token invalido");
@@ -114,6 +114,6 @@ export const refreshFromToken = async (refreshToken) => {
     return {
         user,
         accessToken: signAccess(user),
-        refreshToken: singRefresh(user),
+        refreshToken: signRefresh(user),
     };
 };

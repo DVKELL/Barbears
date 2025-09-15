@@ -21,12 +21,17 @@ router.post(
     authGuard(["CLIENT", "ADMIN"]),
     validate([
         body("barberId").isMongoId().withMessage("Barber ID invalido"),
-        body("clientId").isMongoId().withMessage("Client ID invalido"),
         body("serviceId").isMongoId().withMessage("Service ID invalido"),
         body("startAtISO").isISO8601().withMessage("Debe ser ISO 8601"),
     ]),
     asyncH(async (req, res) => {
         const clientId = req.user?._id || req.body.clientId;
+
+        if (!clientId) {
+            const err = new Error("Client ID requerido");
+            err.status = 404;
+            throw err;
+        }
         //se usa el spread operator porque puede que clientID no venga en el body
         const appt = await createAppointment({ clientId, ...req.body });
         res.status(201).json(appt);

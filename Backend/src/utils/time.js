@@ -7,5 +7,5 @@ export const addMin = (date, min) => {
 
 //[aStart, aEnd) y [bStart, bEnd) se solapan si:
 export const overLaps = (aStart, aEnd, bStart, bEnd) => {
-    aStart < bEnd && aEnd > bStart;
+   return aStart < bEnd && aEnd > bStart;
 };

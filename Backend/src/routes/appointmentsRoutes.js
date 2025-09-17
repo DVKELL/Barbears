@@ -14,7 +14,8 @@ import {
     rescheduleAppointment,
     confirmAppointment,
 } from "../Services/scheduling.service.js";
-/************************************************************* */
+/*————————————————————————————————————————————————————————————————————*/
+
 //Crear una cita (Requiere req.user si se usa devAuth)
 router.post(
     "/",
@@ -25,7 +26,7 @@ router.post(
         body("startAtISO").isISO8601().withMessage("Debe ser ISO 8601"),
     ]),
     asyncH(async (req, res) => {
-        const clientId = req.user?._id || req.body.clientId;
+        const clientId = req.user?._id || req.body.clientId; //Admin puede crear la cit para otra persona
 
         if (!clientId) {
             const err = new Error("Client ID requerido");
@@ -78,6 +79,7 @@ router.get(
     })
 );
 
+//Cancelar una cita
 router.patch(
     "/:id/cancel",
     authGuard(["CLIENT", "ADMIN", "BARBER"]),
@@ -91,6 +93,7 @@ router.patch(
     })
 );
 
+//Re agendar citas
 router.patch(
     "/:id/reschedule",
     authGuard(["CLIENT", "BARBER", "ADMIN"]),
@@ -108,6 +111,7 @@ router.patch(
     })
 );
 
+//Confirmar una cita
 router.patch(
     "/:id/confirm",
     authGuard(["BARBER", "ADMIN"]),

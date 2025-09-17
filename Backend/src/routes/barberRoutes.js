@@ -61,7 +61,7 @@ router.post(
             .withMessage("workHours.end debe ser en formato HH:mm"),
     ]),
     asyncH(async (req, res) => {
-        const barberProfile = await CreateProfile(req.body);
+        const barberProfile = await createProfile(req.body);
 
         res.status(201).json(barberProfile);
     })

@@ -22,6 +22,7 @@ const setRefreshCookie = (res, token) => {
     });
 };
 
+//Registrar un cliente 
 router.post(
     "/register",
     validate([
@@ -44,6 +45,7 @@ router.post(
     })
 );
 
+//Login
 router.post(
     "/login",
     validate([

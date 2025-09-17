@@ -1,6 +1,7 @@
 import Barber from "../models/barberSchema.js";
 import UserModel from "../models/usersSchema.js";
 
+//Crear perfil de barbero
 export async function createProfile({
     userId,
     displayName,
@@ -27,6 +28,7 @@ export async function createProfile({
     });
 }
 
+//Listar barberos
 export async function listBarbers() {
     //Trae todos los barberos que esten en la BBDD solo con los campos indicados en el select
     return Barber.find({})

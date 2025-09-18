@@ -40,8 +40,10 @@ async function hasClash({ barberId, startAt, endAt, excludeId }) {
 const assertCanManage = (appt, user, action = "manage") => {
     const isClient =
         user?.role === "CLIENT" && appt.clientId.toString() === user.id;
+
     const isBarber =
         user?.role === "BARBER" && appt.barberId.toString() === user.id;
+
     const isAdmin = user?.role === "ADMIN";
 
     if (!(isClient || isBarber || isAdmin)) {
@@ -57,7 +59,7 @@ const assertInAdvance = (startAt) => {
 
     if (diffH < MIN_HOURS) {
         const err = new Error(
-            `Debe ser con al menos ${MIN_HOURS} de anticipacion`
+            `Debe ser con al menos ${MIN_HOURS} horas de anticipacion`
         );
         err.status = 409;
         throw err;
@@ -122,7 +124,7 @@ export const cancelAppointment = async ({ id, user }) => {
     }
 
     assertCanManage(appt, user, "cancelar");
-    assertInAdvance(appt.startAt);
+    // assertInAdvance(appt.startAt);
 
     //Si la cita tiene cualquiera de estos estatus, no se puede cancelar
     if (["CANCELLED", "COMPLETED", "NO_SHOW"].includes(appt.status)) {
@@ -150,7 +152,7 @@ export const rescheduleAppointment = async ({ id, user, newStartAtISO }) => {
     }
 
     assertCanManage(appt, user, "reprogramar");
-    assertInAdvance(appt.startAt);
+    // assertInAdvance(appt.startAt);
 
     const service = await Service.findById(appt.serviceId).lean();
     const newStartAt = new Date(newStartAtISO);

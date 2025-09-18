@@ -14,7 +14,7 @@ const router = Router();
 //Solicitarle explicacion al prof
 const setRefreshCookie = (res, token) => {
     const days = Number(process.env.REFRESH_TOKEN_TTL_DAYS || 7);
-    res.cookie("refresToken", token, {
+    res.cookie("refreshToken", token, {
         httpOnly: true,
         sameSite: "lax",
         secure: process.env.NODE_ENV === "production",

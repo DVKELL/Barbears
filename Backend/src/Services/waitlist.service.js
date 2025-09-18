@@ -3,6 +3,7 @@ import WaitlistEntry from "../models/WaitlistEntrySchema.js";
 const ACTIVE_STATUSES = ["OPEN", "NOTIFIED"];
 
 export async function createEntry({ clientId, barberId, serviceId, dateKey }) {
+   
     if (!clientId || !barberId || !dateKey) {
         const err = new Error(
             "Los campos, clientId, barberId y dateKey son requeridos"

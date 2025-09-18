@@ -2,7 +2,7 @@ import { createUser } from "../Services/admin.service.js";
 import { Router } from "express";
 import asyncH from "../utils/asyncHandler.js";
 import authGuard from "../middlewares/authGuard.js";
-import validate from "../middlewares/validate.js";
+import { validate } from "../middlewares/validate.js";
 import { body } from "express-validator";
 
 const router = Router();
@@ -12,11 +12,21 @@ router.post(
     "/create/user",
     authGuard(["ADMIN"]),
     validate([
-        body("fullName").trim().isLength({ min: 2, max: 80 }),
-        body("email").isEmail().normalizeEmail(),
-        body("password").isLength({ min: 6 }),
-        body("role").isIn(["ADMIN"]),
-        body("dni").optional().isString().isLength({ min: 6 }),
+        body("fullName")
+            .trim()
+            .isLength({ min: 2, max: 80 })
+            .withMessage("Es necesario el nombre de usuario"),
+        body("email")
+            .isEmail()
+            .withMessage("Es necesario el correo electronico"),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("La contraseña debe tener mínimo 6 digitos"),
+        body("dni")
+            .optional()
+            .isString()
+            .isLength({ min: 6 })
+            .withMessage("Es necesario el DNI"),
     ]),
     asyncH(async (req, res) => {
         const userCreated = await createUser(req.body);

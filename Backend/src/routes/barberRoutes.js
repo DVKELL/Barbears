@@ -131,6 +131,7 @@ router.get(
             })
         );
     })
+    //El USER ID del barbero se debe pasar por parametro y las fechas en formato ISO  se deben pasar en una query 
 );
 
 export default router;

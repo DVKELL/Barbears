@@ -10,6 +10,9 @@ export async function publishAvailability({
     const startAt = new Date(startAtISO);
     const endAt = new Date(endAtISO);
 
+    console.log("startAt:", startAt)
+    console.log("endAt:", endAt)
+
     if (!(startAt < endAt)) {
         const err = new Error(
             "La hora de comienzo debe ser menor a la hora de finalizacion"

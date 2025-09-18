@@ -15,7 +15,7 @@ export const validate = (chains) => async (req, res, next) => {
         return res.status(422).json({
             errors: result
                 .array()
-                .map(({ param, msg }) => ({ field: param, message: msg })),
+                .map(({ param, msg }) => ({ field: param, message: msg, mensaje: 'Error de validacion' })),
         });
     }
 

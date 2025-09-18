@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/usersSchema.js";
 
 //Token corto 15 min
-const signAccess = (user) => {
+export const signAccess = (user) => {
     const payload = {
         sub: user._id.toString(),
         role: user.role,
@@ -15,7 +15,7 @@ const signAccess = (user) => {
 };
 
 //Token de larga duracion (dias)
-const signRefresh = (user) => {
+export const signRefresh = (user) => {
     const days = Number(process.env.REFRESH_TOKEN_TTL_DAYS || 7);
     return jwt.sign(
         { sub: user._id.toString(), tokenType: "refresh" },
@@ -62,13 +62,20 @@ export const registerClient = async ({
 };
 
 export const loginClient = async ({ email, password }) => {
+    console.log("DATA:", email, password);
+
     if (!email || !password) {
         const err = new Error("El correo y la contraseña son requeridos");
         err.status = 422;
         throw err;
     }
 
-    const user = await User.findOne({ email, role: "CLIENT", isActive: true });
+    const user = await User.findOne({
+        email,
+        //$in: funciona para que busque cualquiera de los valores dentro de role
+        role: { $in: ["CLIENT", "ADMIN", "BARBER"] },
+        isActive: true,
+    });
     if (!user) {
         const err = new Error("Usuario no encontrado");
         err.status = 401;

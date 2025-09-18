@@ -1,5 +1,7 @@
 import User from "../models/usersSchema.js";
 import bcrypt from "bcryptjs";
+import { signAccess } from "./auth.service.js";
+import { signRefresh } from "./auth.service.js";
 
 export const createUser = async ({
     dni,
@@ -40,5 +42,8 @@ export const createUser = async ({
         role,
     });
 
-    return userCreated.toJSON();
+    const accessToken = signAccess(userCreated);
+    const refreshToken = signRefresh(userCreated);
+
+    return { user: userCreated.toJSON(), accessToken, refreshToken };
 };

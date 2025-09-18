@@ -26,6 +26,7 @@ router.post(
         body("startAtISO").isISO8601().withMessage("Debe ser ISO 8601"),
     ]),
     asyncH(async (req, res) => {
+        //El clientId viene de las cookies 
         const clientId = req.user?._id || req.body.clientId; //Admin puede crear la cit para otra persona
 
         if (!clientId) {
@@ -41,17 +42,18 @@ router.post(
 
 //Citas del cliente autenticado
 router.get(
-    "/me",
+    //NO SE GUARDA BIEN EL USUARIO EN LA COOKIE
+    "/me/:id",
     authGuard(["CLIENT"]),
     asyncH(async (req, res) => {
-        const clientId = req.user?._id || req.query.clientId; //dev
+        const clientId = req.user?._id || req.params.id; //dev
         res.status(201).json(await listClientAppointments({ clientId }));
     })
 );
 
 //Agenda del barbero autenticado o por query
 router.get(
-    "/barber/me",
+    "/barber/me/:id",
     authGuard(["BARBER", "ADMIN"]),
     validate([
         query("from").optional().isISO8601().withMessage("from ISO 8601"),
@@ -67,7 +69,7 @@ router.get(
             .withMessage("si envías rangos, to debe ser mayor que from"),
     ]),
     asyncH(async (req, res) => {
-        const barberId = req.user?._id || req.query.barberId;
+        const barberId = req.user?._id || req.params.id; //dev
 
         res.status(201).json(
             await listBarberAppointments({

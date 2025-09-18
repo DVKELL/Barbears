@@ -1,16 +1,17 @@
 import { Router } from "express";
 import asyncH from "../utils/asyncHandler.js";
+import { body } from "express-validator";
+import { validate } from "../middlewares/validate.js";
+
 import {
     registerClient,
     loginClient,
     refreshFromToken,
 } from "../Services/auth.service.js";
 
-import { body } from "express-validator";
-import { validate } from "../middlewares/validate.js";
-
 const router = Router();
 
+//Solicitarle explicacion al prof
 const setRefreshCookie = (res, token) => {
     const days = Number(process.env.REFRESH_TOKEN_TTL_DAYS || 7);
     res.cookie("refresToken", token, {
@@ -22,11 +23,11 @@ const setRefreshCookie = (res, token) => {
     });
 };
 
-//Registrar un cliente 
+//Registrar un cliente
 router.post(
     "/register",
     validate([
-        body("name")
+        body("fullName")
             .trim()
             .isLength({ min: 2, max: 80 })
             .withMessage("Nombre de 2 a 80 caracteres"),
@@ -49,14 +50,10 @@ router.post(
 router.post(
     "/login",
     validate([
-        body("email")
-            .trim()
-            .isEmail()
-            .withMessage("Correo inválido")
-            .normalizeEmail(),
-        body("password")
-            .isLength({ min: 6 })
-            .withMessage("contraseña mínimo 6"),
+        body("email").trim().isEmail().withMessage("Correo inválido"),
+        // body("password")
+        //     .isLength({ min: 6 })
+        //     .withMessage("contraseña mínimo 6 digitos"),
     ]),
     asyncH(async (req, res) => {
         const result = await loginClient(req.body);
@@ -64,6 +61,7 @@ router.post(
     })
 );
 
+//Solicitarle explicacion al prof
 //Refresca el Token
 router.post(
     "/refresh",
@@ -82,6 +80,7 @@ router.post(
     })
 );
 
+//Funciona pero hay que PREGUNTARLE AL PROF que hace clear.Cookie
 router.post(
     "/logout",
     asyncH(async (_req, res) => {

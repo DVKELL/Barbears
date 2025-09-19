@@ -1,3 +1,5 @@
+/*——————————IMPORTS PRINCIPALES——————————————— */
+
 //Importar mongoose
 import mongoose from "mongoose";
 
@@ -6,7 +8,7 @@ import express from "express";
 
 //importar dotenv
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config(); //Configuracion de dotenv
 
 //Importar Cors
 import cors from "cors";
@@ -17,11 +19,13 @@ import cookieParser from "cookie-parser";
 //importar el router
 import router from "./routes/index.js";
 
-/*
-    //Para la ruta de los archivos
-    import { fileURLToPath } from "url";
-    import path from "path";
-*/
+/*———————————————EJS—————————————————— */
+//Path funciona para trabajar con rutas de archivos y directorios
+import path from "node:path";
+
+//Importa express Layouts
+import expressLayouts from "express-ejs-layouts";
+/*————————————————————————————————— */
 
 //Importar las sessiones de express (cookies)
 import session from "express-session";
@@ -29,25 +33,47 @@ import session from "express-session";
 //Importar Middleware de autenticacion
 import { devAuth } from "./middlewares/devAuth.js";
 
+//Importar Middleware de Manejo de errores
 import errorHandler from "./middlewares/errorHandler.js";
 
-/* ----------- Conexión a base de datos -------------------------- */
+/* ——————————————— Conexión a base de datos ——————————————— */
 mongoose
     .connect(process.env.MONGODB_URI)
     .then(() => console.log("Conexion exitosa a mongodb"))
     .catch((err) => console.log("Hubo un error: ", err));
 
-/* ----------- Configuración de Express -------------------------- */
+/* ——————————————— Configuración de Express ——————————————— */
 const app = express();
 /*
 const __dirname = path.dirname(fileURLToPath(import.meta.url)); // para obtener el directorio actual
 */
 
-/* ----------- Middlewares -------------------------- */
+/* ——————————————— Middlewares ——————————————— */
 //Permite que las peticiones del origen ingresen
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+/*—————————CONFIGURACION DE VISTAS EJS ——————————— */
+//Para unir la ruta raiz con las rutas src/ y views/
+app.set("views", path.join(process.cwd(), "src", "views"));
+//process.cwd() devuelve el directorio raiz donde se ejecuta la app
+//ej: Documentos/EDT/Barbears
+//path.join, une la ruta raiz con las carpetas src y views
+//ej: Documentos/EDT/Barbears/src/views
+
+//Indica que el motor de plantillas sera ejs
+app.set("view engine", "ejs");
+
+//Activacion del middleware express-ejs-layouts
+app.use(expressLayouts);
+
+//Define el layout "layouts/main" por defecto para todas las vistas
+app.set("layout", "layouts/main");
+
+// archivos estáticos (css/img)
+// app.use(express.static(path.join(process.cwd(), "public")));
+/*————————————————————————— */
 
 //Usar middleware de autenticacion
 app.use(devAuth);
@@ -66,7 +92,7 @@ app.use(
     })
 );
 
-/* ------------- Rutas Backend ----------*/
+/* ——————————————— Rutas Backend ———————————————*/
 
 app.use("/api/v1/health", (_, res) => {
     res.json({ ok: true, name: "Skol Barber", time: Date.now() });

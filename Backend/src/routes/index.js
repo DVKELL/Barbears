@@ -17,6 +17,10 @@ router.get("/health", (_req, res) => {
     });
 });
 
+router.get("/ejs", (_, res) => {
+    res.render("login/login");
+});
+
 //Se accede con /admin/create/user
 router.use("/admin", adminRoutes);
 router.use("/auth", authRoutes);

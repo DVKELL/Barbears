@@ -13,3 +13,7 @@ body,
 #root {
   height: 100%;
 } */
+
+.red{
+    background-color: rgb(236, 77, 77);
+}

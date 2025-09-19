@@ -23,6 +23,8 @@ import router from "./routes/index.js";
 //Path funciona para trabajar con rutas de archivos y directorios
 import path from "node:path";
 
+import { fileURLToPath } from "node:url";
+
 //Importa express Layouts
 import expressLayouts from "express-ejs-layouts";
 /*————————————————————————————————— */
@@ -43,10 +45,10 @@ mongoose
     .catch((err) => console.log("Hubo un error: ", err));
 
 /* ——————————————— Configuración de Express ——————————————— */
+// para obtener el directorio actual
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express();
-/*
-const __dirname = path.dirname(fileURLToPath(import.meta.url)); // para obtener el directorio actual
-*/
 
 /* ——————————————— Middlewares ——————————————— */
 //Permite que las peticiones del origen ingresen
@@ -56,11 +58,9 @@ app.use(express.json());
 
 /*—————————CONFIGURACION DE VISTAS EJS ——————————— */
 //Para unir la ruta raiz con las rutas src/ y views/
-app.set("views", path.join(process.cwd(), "src", "views"));
-//process.cwd() devuelve el directorio raiz donde se ejecuta la app
-//ej: Documentos/EDT/Barbears
-//path.join, une la ruta raiz con las carpetas src y views
-//ej: Documentos/EDT/Barbears/src/views
+app.set("views", path.join(__dirname, "views"));
+//path.join, une la ruta raiz con la carpeta views
+//ej: Documentos/EDT/Barbears/Backend/src/views
 
 //Indica que el motor de plantillas sera ejs
 app.set("view engine", "ejs");
@@ -72,7 +72,7 @@ app.use(expressLayouts);
 app.set("layout", "layouts/main");
 
 // archivos estáticos (css/img)
-// app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 /*————————————————————————— */
 
 //Usar middleware de autenticacion

@@ -12,7 +12,7 @@ import {
     deleteEntry,
     countForBarberDay,
     summaryForBarberDay,
-} from "../Services/waitlist.service.js";
+} from "../services/waitlist.service.js";
 
 //Crear una entrada (para el cliente)
 router.post(

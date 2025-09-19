@@ -7,13 +7,13 @@ import {
     createProfile,
     listBarbers,
     getBarberProfile,
-} from "../Services/barber.service.js";
+} from "../services/barber.service.js";
 
 //Funciones de disponibilidad
 import {
     listAvailabilityRange,
     publishAvailability,
-} from "../Services/availability.service.js";
+} from "../services/availability.service.js";
 
 //Helper
 import asyncH from "../utils/asyncHandler.js";
@@ -131,7 +131,7 @@ router.get(
             })
         );
     })
-    //El USER ID del barbero se debe pasar por parametro y las fechas en formato ISO  se deben pasar en una query 
+    //El USER ID del barbero se debe pasar por parametro y las fechas en formato ISO  se deben pasar en una query
 );
 
 export default router;

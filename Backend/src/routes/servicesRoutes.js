@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
     createService,
     listServices,
-} from "../Services/serviceCatalog.service.js";
+} from "../services/serviceCatalog.service.js";
 
 import asyncH from "../utils/asyncHandler.js";
 
@@ -28,7 +28,8 @@ router.get(
 router.post(
     "/",
     authGuard(["ADMIN"]), //VALIDA SI ES ADMIN
-    validate([ //Validaciones de express-validator
+    validate([
+        //Validaciones de express-validator
         body("name")
             .trim()
             .isLength({ min: 2, max: 80 })

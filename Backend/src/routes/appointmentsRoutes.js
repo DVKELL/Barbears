@@ -13,7 +13,7 @@ import {
     cancelAppointment,
     rescheduleAppointment,
     confirmAppointment,
-} from "../Services/scheduling.service.js";
+} from "../services/scheduling.service.js";
 /*————————————————————————————————————————————————————————————————————*/
 
 //Crear una cita (Requiere req.user si se usa devAuth)
@@ -26,7 +26,7 @@ router.post(
         body("startAtISO").isISO8601().withMessage("Debe ser ISO 8601"),
     ]),
     asyncH(async (req, res) => {
-        //El clientId viene de las cookies 
+        //El clientId viene de las cookies
         const clientId = req.user?._id || req.body.clientId; //Admin puede crear la cit para otra persona
 
         if (!clientId) {

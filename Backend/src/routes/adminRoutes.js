@@ -1,4 +1,4 @@
-import { createUser } from "../Services/admin.service.js";
+import { createUser } from "../services/admin.service.js";
 import { Router } from "express";
 import asyncH from "../utils/asyncHandler.js";
 import authGuard from "../middlewares/authGuard.js";

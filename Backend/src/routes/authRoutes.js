@@ -7,7 +7,7 @@ import {
     registerClient,
     loginClient,
     refreshFromToken,
-} from "../Services/auth.service.js";
+} from "../services/auth.service.js";
 
 const router = Router();
 

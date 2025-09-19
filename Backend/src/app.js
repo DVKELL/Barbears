@@ -75,7 +75,6 @@ app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 //Activa el parser del cookies para poder leerlas en req.cookies
 app.use(cookieParser());
 

@@ -8,7 +8,9 @@
     "main": "src/app.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon Backend/src/app.js"
+        "dev": "nodemon Backend/src/app.js",
+        "dev:css": "postcss Backend/src/styles/app.css -o Backend/public/css/index.css -w",
+        "build:css": "postcss Backend/src/styles/app.css -o Backend/public/css/index.css --env production"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",
@@ -24,6 +26,10 @@
         "mongoose": "^8.17.0"
     },
     "devDependencies": {
-        "nodemon": "^3.1.10"
+        "@tailwindcss/postcss": "^4.1.13",
+        "nodemon": "^3.1.10",
+        "postcss": "^8.5.6",
+        "postcss-cli": "^11.0.1",
+        "tailwindcss": "^4.1.13"
     }
 }

@@ -1,0 +1,15 @@
+/* Backend/src/styles/app.css */
+@import "tailwindcss";
+
+/* (Opcional) si Tailwind no detecta tus clases en .ejs, declara la fuente */
+@source "../views";
+
+/* (Opcional) añade tus tokens y escalas aquí */
+@theme {
+    --font-sans: ui-sans-serif, system-ui, sans-serif;
+    --color-Vinotinto: #6a0002;
+    --color-Verde-Botella: #003d3a;
+    --color-Mostaza: #f1ad18;
+    --color-Mostaza-Hover: #f7bd40;
+    --color-Verde-Hover: #005752;
+}

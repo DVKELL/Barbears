@@ -38,23 +38,11 @@ import { devAuth } from "./middlewares/devAuth.js";
 //Importar Middleware de Manejo de errores
 import errorHandler from "./middlewares/errorHandler.js";
 
-/* ——————————————— Conexión a base de datos ——————————————— */
-mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => console.log("Conexion exitosa a mongodb"))
-    .catch((err) => console.log("Hubo un error: ", err));
-
 /* ——————————————— Configuración de Express ——————————————— */
 // para obtener el directorio actual
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-
-/* ——————————————— Middlewares ——————————————— */
-//Permite que las peticiones del origen ingresen
-app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 /*—————————————————CONFIGURACION DE VISTAS EJS ——————————————————— */
 //Para unir la ruta raiz con las rutas src/ y views/
@@ -75,9 +63,18 @@ app.set("layout", "layouts/main");
 app.use(express.static(path.join(__dirname, "..", "public")));
 /*————————————————————————————————————————————————————————————————— */
 
-//Usar middleware de autenticacion
-app.use(devAuth);
-app.use(errorHandler);
+/* ——————————————— Conexión a base de datos ——————————————— */
+mongoose
+    .connect(process.env.MONGODB_URI)
+    .then(() => console.log("Conexion exitosa a mongodb"))
+    .catch((err) => console.log("Hubo un error: ", err));
+
+/* ——————————————— Middlewares ——————————————— */
+//Permite que las peticiones del origen ingresen
+app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 
 //Activa el parser del cookies para poder leerlas en req.cookies
 app.use(cookieParser());
@@ -92,6 +89,9 @@ app.use(
     })
 );
 
+//Usar middleware de autenticacion
+app.use(devAuth);
+
 /* ——————————————— Rutas Backend ———————————————*/
 
 app.use("/api/v1/health", (_, res) => {
@@ -99,6 +99,9 @@ app.use("/api/v1/health", (_, res) => {
 });
 //todas las rutas del backend
 app.use("/api/v1", router); //Utiliza todas las rutas que esten en el router
+
+//Middleware de errores
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 

@@ -14,7 +14,6 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-3xs: 16rem;
-    --container-xl: 36rem;
     --container-7xl: 80rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
@@ -202,9 +201,6 @@
   .m-auto {
     margin: auto;
   }
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
   .mt-5 {
     margin-top: calc(var(--spacing) * 5);
   }
@@ -322,9 +318,6 @@
   }
   .object-cover {
     object-fit: cover;
-  }
-  .object-top {
-    object-position: top;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);

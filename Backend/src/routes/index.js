@@ -9,6 +9,9 @@ import waitlistRoutes from "./waitlistRoutes.js";
 import authRoutes from "./authRoutes.js";
 import adminRoutes from "./adminRoutes.js";
 
+/*PRUEBA*/
+import { listServices } from "../services/serviceCatalog.service.js";
+
 // Prueba para validar si el server esta vivo
 router.get("/health", (_req, res) => {
     res.json({
@@ -17,12 +20,14 @@ router.get("/health", (_req, res) => {
     });
 });
 
-router.get("/ejs", (_, res) => {
+router.get("/ejs", async (_, res) => {
     res.render("login/login");
 });
 
-router.get("/", (_, res) => {
-    res.render("pages/landing");
+router.get("/", async (_, res) => {
+    const services = await listServices();
+    const services1 = true;
+    res.render("pages/landing", { services });
 });
 
 //Se accede con /admin/create/user

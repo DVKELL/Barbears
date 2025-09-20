@@ -62,8 +62,6 @@ export const registerClient = async ({
 };
 
 export const loginClient = async ({ email, password }) => {
-    console.log("DATA:", email, password);
-
     if (!email || !password) {
         const err = new Error("El correo y la contraseña son requeridos");
         err.status = 422;

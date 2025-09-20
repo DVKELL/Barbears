@@ -21,6 +21,10 @@ router.get("/ejs", (_, res) => {
     res.render("login/login");
 });
 
+router.get("/", (_, res) => {
+    res.render("pages/landing");
+});
+
 //Se accede con /admin/create/user
 router.use("/admin", adminRoutes);
 router.use("/auth", authRoutes);

@@ -1,5 +1,5 @@
 <!-- HERO IMAGE -->
-<section class="relative h-[calc(100vh-80px)] w-full overflow-hidden mb-8">
+<section class="relative h-[calc(100vh-80px)] w-full overflow-hidden">
     <img
         src="/assets/bg-Hero-Landing.jpg"
         alt="Mesa de barberia"
@@ -15,36 +15,104 @@
 </section>
 
 <!-- LISTADO DE SERVICIOS -->
-<section class="p-2 m-auto max-w-[1600px]">
-    <h1 class="text-lg sm:text-4xl mb-6 lg:mb-10">Nuestros servicios 💈</h1>
-    <div
-        class="grid grid-cols-[repeat(auto-fit,_minmax(256px,_1fr))] gap-3.5 place-items-center sm:gap-4"
-    >
-        <!-- CARD -->
-        <% if (services && services.length > 0) { %> <% services.forEach(i =>
-        {%>
-        <div class="max-w-80 overflow-hidden rounded-md border flex flex-col">
-            <picture class="w-full">
-                <img
-                    src="https://images.unsplash.com/photo-1732319622287-a9c37287b43e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Imagen de prueba"
-                />
-            </picture>
-            <div class="p-2 text-sm flex flex-col gap-1.5 sm:p-4 sm:gap-2">
-                <h3 class="text-center text-base font-bold"><%= i.name%></h3>
-                <p class="text-center">Precio: <%=i.price%></p>
-                <p class="text-center">Duracion: <%=i.durationMin%></p>
-                <a
-                    href="#"
-                    class="p-1 text-center bg-Verde-Botella text-white font-bold rounded-sm cursor-pointer"
-                    >Solicitar cita 💈</a
-                >
+<div class="bg-amber-200/20">
+    <section class="m-auto max-w-[1600px] pt-16 pb-16 px-3">
+        <h2 class="text-lg sm:text-4xl mb-6 lg:mb-10">Nuestros servicios 💈</h2>
+        <div
+            class="grid grid-cols-[repeat(auto-fit,_minmax(256px,_1fr))] gap-3.5 place-items-center sm:gap-4"
+        >
+            <!-- CARD -->
+            <% if (services && services.length > 0) { %> <% services.forEach(i=>
+            {%>
+            <div
+                class="bg-white max-w-80 overflow-hidden rounded-md border flex flex-col"
+            >
+                <picture class="w-full">
+                    <img
+                        src="https://images.unsplash.com/photo-1732319622287-a9c37287b43e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Imagen de prueba"
+                    />
+                </picture>
+                <div class="p-2 text-sm flex flex-col gap-1.5 sm:p-4 sm:gap-2">
+                    <h3 class="text-center text-base font-bold">
+                        <%= i.name%>
+                    </h3>
+                    <p class="text-center">Precio: <%=i.price%>$</p>
+                    <p class="text-center">Duracion: <%=i.durationMin%> min</p>
+                    <a
+                        href="#"
+                        class="p-1 text-center bg-Mostaza text-white font-bold rounded-sm cursor-pointer hover:bg-Mostaza-Hover"
+                        >Solicitar cita 💈</a
+                    >
+                </div>
             </div>
+            <% }); %>
+            <!-- —————————— -->
+            <% } else { %>
+            <h2>No hay servicios disponibles</h2>
+            <% };%>
         </div>
-        <% }) %>
-        <!-- —————————— -->
-        <% } else { %>
-        <h2>No hay servicios disponibles</h2>
-        <% }%>
-    </div>
+    </section>
+</div>
+
+<!-- Hacer cards mas grandes, y vistosas, para mostrar correctamente a los barberos -->
+<!-- LISTADO DE BARBEROS -->
+<div class="bg-emerald-700/40">
+    <section class="p-2 m-auto max-w-[1600px] pt-16 pb-16">
+        <h2 class="text-lg font-semibold text-white sm:text-4xl mb-6 lg:mb-10">
+            Nuestros Barberos ✂
+        </h2>
+        <div
+            class="grid grid-cols-[repeat(auto-fit,_minmax(256px,_1fr))] gap-3.5 place-items-center sm:gap-4"
+        >
+            <!-- BARBER CARD -->
+            <% const dayMap ={ 0: "Domingo", 1: "Lunes", 2: "Martes", 3:
+            "Miercoles", 4: "Jueves", 5: "Viernes", 6: "Sabado", } %> <% if
+            (barbers &&barbers.length > 0) { %> <% barbers.forEach(i => {%>
+            <!-- BARBER CARD -->
+            <div
+                class="bg-white w-full max-w-80 sm:min-h-[400px] overflow-hidden rounded-md border flex flex-col"
+            >
+                <picture class="w-full">
+                    <img
+                        src="https://images.unsplash.com/photo-1732319622287-a9c37287b43e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                        alt="Imagen de prueba"
+                    />
+                </picture>
+                <div class="p-2 text-sm flex flex-col gap-1.5 sm:p-4 sm:gap-2">
+                    <h3 class="text-center text-base font-bold">
+                        <%= i.displayName%>
+                    </h3>
+                    <p class="text-center overflow-hidden">
+                        Servicios: <%=i.services%>
+                    </p>
+                    <p class="text-center">
+                        Horario: <%i.workDays.forEach(day => { %> <%=
+                        dayMap[day]%>, <%});%> de <%= i.workHours.start%> a
+                        <%=i.workHours.end%>
+                    </p>
+                    <a
+                        href="#"
+                        class="p-1 text-center bg-Verde-Botella text-white font-bold rounded-sm cursor-pointer hover:bg-Verde-Hover"
+                        >Ver disponibilidad 💇🏼‍♂️</a
+                    >
+                </div>
+            </div>
+            <% }) %>
+            <!-- —————————— -->
+            <% } else { %>
+            <h2>No hay Barberos disponibles</h2>
+            <% };%>
+        </div>
+    </section>
+</div>
+
+<!-- Cuadro flotante -->
+<section>
+        <div>
+            <h3>La mejor Barberia Ubicada en Caracas</h3>
+            <p>¿Deseas una cita con los mejores barberos de la ciudad y la mayor calidad de servicio? Registrate ahora comenzar tu experiencia </p>
+            <a href="#">Registrarse</a>    
+        </div>
 </section>
+<script src="/js/js.js"></script>

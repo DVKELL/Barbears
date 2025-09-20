@@ -11,6 +11,7 @@ import adminRoutes from "./adminRoutes.js";
 
 /*PRUEBA*/
 import { listServices } from "../services/serviceCatalog.service.js";
+import { listBarbers } from "../services/barber.service.js";
 
 // Prueba para validar si el server esta vivo
 router.get("/health", (_req, res) => {
@@ -20,14 +21,21 @@ router.get("/health", (_req, res) => {
     });
 });
 
+//PROBANDO EL RENDER DE LAS VISTAS
 router.get("/ejs", async (_, res) => {
     res.render("login/login");
 });
 
+//PROBANDO EL RENDER DE LA LANDING
 router.get("/", async (_, res) => {
     const services = await listServices();
-    const services1 = true;
-    res.render("pages/landing", { services });
+    const barbers = await listBarbers();
+
+    const data = {
+        services,
+        barbers,
+    };
+    res.render("pages/landing", data);
 });
 
 //Se accede con /admin/create/user

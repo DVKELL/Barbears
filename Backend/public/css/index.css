@@ -8,10 +8,7 @@
       "Courier New", monospace;
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-amber-50: oklch(98.7% 0.022 95.277);
-    --color-amber-100: oklch(96.2% 0.059 95.617);
     --color-amber-200: oklch(92.4% 0.12 95.746);
-    --color-amber-700: oklch(55.5% 0.163 48.998);
-    --color-green-300: oklch(87.1% 0.15 154.449);
     --color-emerald-700: oklch(50.8% 0.118 165.612);
     --color-cyan-500: oklch(71.5% 0.143 215.221);
     --color-neutral-100: oklch(97% 0 0);
@@ -310,6 +307,9 @@
   .overflow-hidden {
     overflow: hidden;
   }
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
   .rounded-md {
     border-radius: var(--radius-md);
   }
@@ -374,17 +374,11 @@
   .p-2 {
     padding: calc(var(--spacing) * 2);
   }
-  .p-5 {
-    padding: calc(var(--spacing) * 5);
-  }
   .px-0\.5 {
     padding-inline: calc(var(--spacing) * 0.5);
   }
   .px-1 {
     padding-inline: calc(var(--spacing) * 1);
-  }
-  .px-1\.5 {
-    padding-inline: calc(var(--spacing) * 1.5);
   }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
@@ -436,6 +430,9 @@
   .text-Mostaza {
     color: var(--color-Mostaza);
   }
+  .text-Verde-Botella {
+    color: var(--color-Verde-Botella);
+  }
   .text-Vinotinto {
     color: var(--color-Vinotinto);
   }
@@ -455,27 +452,10 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-  .hover\:bg-Mostaza {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-Mostaza);
-      }
-    }
-  }
   .hover\:bg-Mostaza-Hover {
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-Mostaza-Hover);
-      }
-    }
-  }
-  .hover\:bg-Mostaza\/80 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #f1ad18 80%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-Mostaza) 80%, transparent);
-        }
       }
     }
   }
@@ -500,23 +480,6 @@
       }
     }
   }
-  .hover\:bg-neutral-200 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-neutral-200);
-      }
-    }
-  }
-  .hover\:bg-neutral-200\/30 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, oklch(92.2% 0 0) 30%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-neutral-200) 30%, transparent);
-        }
-      }
-    }
-  }
   .hover\:bg-neutral-200\/50 {
     &:hover {
       @media (hover: hover) {
@@ -524,50 +487,6 @@
         @supports (color: color-mix(in lab, red, red)) {
           background-color: color-mix(in oklab, var(--color-neutral-200) 50%, transparent);
         }
-      }
-    }
-  }
-  .hover\:bg-neutral-300 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-neutral-300);
-      }
-    }
-  }
-  .hover\:bg-white\/10 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #fff 10%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-white) 10%, transparent);
-        }
-      }
-    }
-  }
-  .hover\:bg-white\/30 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #fff 30%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-        }
-      }
-    }
-  }
-  .hover\:bg-white\/80 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #fff 80%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
-        }
-      }
-    }
-  }
-  .hover\:bg-white\/100 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-white);
       }
     }
   }

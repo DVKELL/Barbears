@@ -59,6 +59,12 @@ router.post(
         const result = await loginClient(req.body);
         res.json(result);
     })
+
+    /*Enviar la cookie con res.cookie('NOMBRE DEL TOKEN', informacion que se va a guardar, {
+    httpOnly: true,
+    maxAge: 3600000})
+    Se debee guardar el payload 
+    esto setea req.cookies.NOMBRE DEL TOKEN, para poder realizar la validacion de rutas*/
 );
 
 //Solicitarle explicacion al prof

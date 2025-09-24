@@ -79,6 +79,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 //Todas las sesiones necesitan una llave secreta, se configura asi
+/**
+ 
 app.use(
     session({
         secret: process.env.SESSION_SECRET || "key-secret", //Nombre de la llave secreta
@@ -87,6 +89,7 @@ app.use(
         cookie: { maxAge: 1000 * 60 * 60 }, //la duracion de la cookie: 1 hora
     })
 );
+*/
 
 //Usar middleware de autenticacion
 app.use(devAuth);

@@ -38,6 +38,15 @@ router.get("/", async (_, res) => {
     res.render("pages/landing", data);
 });
 
+//PROBANDO EL LOGIN
+router.get("/login", (_, res) => {
+    res.render("users/loginForm");
+});
+
+router.get("/clients", (_, res) => {
+    res.render("users/clientPage");
+});
+
 //Se accede con /admin/create/user
 router.use("/admin", adminRoutes);
 router.use("/auth", authRoutes);

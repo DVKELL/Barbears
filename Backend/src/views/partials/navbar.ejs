@@ -4,13 +4,15 @@
             class="flex w-full max-w-96 m-auto gap-1 sm:max-w-full md:justify-between 2xl:justify-between"
         >
             <picture
-                class="w-1/4 flex items-center justify-center lg:justify-start 2xl:max-w-3xs"
+                class="w-1/4 flex items-center justify-center lg:justify-start 2xl:max-w-3xs cursor-pointer"
             >
-                <img
-                    class="w-full min-w-16 max-w-28"
-                    src="/assets/skol-logo.png"
-                    alt="Logo de Skol Barber"
-                />
+                <a href="/api/v1">
+                    <img
+                        class="w-full min-w-16 max-w-28"
+                        src="/assets/skol-logo.png"
+                        alt="Logo de Skol Barber"
+                    />
+                </a>
             </picture>
             <div
                 class="flex flex-1 items-center justify-between px-2 text-[10px] sm:text-base sm:px-4 md:max-w-[70%] lg:px-3 lg:justify-around xl:max-w-[700px]"
@@ -32,11 +34,13 @@
                 >
 
                 <a
+                    href="/api/v1/login"
+                    id="logBtn"
                     class="text-Vinotinto bg-amber-50 rounded-sm px-1 py-1 font-semibold transition hover:bg-neutral-100 sm:p-3"
-                    href="#"
                     >Iniciar Sesión</a
                 >
             </div>
         </div>
     </nav>
 </header>
+<script src="/js/navbar.js"></script>

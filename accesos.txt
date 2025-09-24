@@ -1,0 +1,118 @@
+ADMIN:
+
+    "user": {
+        "dni": "30111851",
+        "fullName": "Admin",
+        "phoneNumber": "04129323466",
+        "email": "daikell.od@gmail.com",
+        "passwordHash": "$2b$10$tmOaBYhv1xw53I9Iu5rwh.QbzpyxnyseCTSU/aS66VlDjC3nCIGdS",
+         passwordNormal: admin
+        "role": "ADMIN",
+        "isActive": true,
+        "_id": "68cb40178e614852a9e092f0",
+        "createdAt": "2025-09-17T23:11:19.750Z",
+        "updatedAt": "2025-09-17T23:11:19.750Z",
+        "__v": 0
+    },
+    "accessToken": "",
+    "refreshToken": ""
+}
+
+LOGIN:{
+    "user": {
+        "_id": "68cb40178e614852a9e092f0",
+        "dni": "30111851",
+        "fullName": "Admin",
+        "phoneNumber": "04129323466",
+        "email": "daikell.od@gmail.com",
+        "passwordHash": "$2b$10$tmOaBYhv1xw53I9Iu5rwh.QbzpyxnyseCTSU/aS66VlDjC3nCIGdS",
+        "role": "ADMIN",
+        "isActive": true,
+        "createdAt": "2025-09-17T23:11:19.750Z",
+        "updatedAt": "2025-09-17T23:11:19.750Z",
+        "__v": 0
+    },
+    "accessToken": "",
+    "refreshToken": ""
+}
+
+————————————————————————————————————————
+BARBERO
+{
+"_id": "68cb47b10b6ecd69713ce022",
+"fullName":"Daikell Barbero Prueba 1",
+"email": "daikellBarbero@prueba.com",
+"password": "soybarbero123",
+"dni": "301118510",
+"phoneNumber": "041293234660",
+"role": "BARBER"
+}
+
+DISPONIBILIDAD:
+{
+  "barberId": "68cb47b10b6ecd69713ce022",
+  "startAtISO": "2025-09-18T13:00:00Z",
+  "endAtISO":   "2025-09-18T17:00:00Z",
+  "isBlocked": false
+}
+
+
+"fullName": "JUAN_BARBER",
+"_id": "68cf2e483435e505692b0eb9",
+
+"fullName": "PEDRO_BARBER",
+"_id": "68cf2e903435e505692b0ebf",
+
+"fullName": "DANIEL_BARBER",
+"_id": "68cf2ebd3435e505692b0ec3",
+
+"fullName": "SAMUEL_BARBER",
+"_id": "68cf2f213435e505692b0ec7",
+
+DISPLAY PROFILE
+
+{
+    "userId":"68cf2e483435e505692b0eb9",
+    "displayName": "JUAN_BARBER",
+    "services": ["68cb6376fef222bfc4c743ea"],
+    "timezone": "AMERICA/Caracas",
+    "workDays": [0, 2, 4, 6 ],
+    "workHours": {
+        "start": "08:00",
+        "end": "14:00"
+    }
+}
+
+————————————————————————————————————————
+CLIENTE
+{
+    "user": {
+        "dni": "31118510",
+        "fullName": "Juan Perez",
+        "phoneNumber": "04129323460",
+        "email": "juan@demo.com",
+        "passwordHash": "$2b$10hz3imb7jxEYebGzawxB8qOpBIlEgWX2ZqnB4M3RpC.S0fazsIKQj2",
+        passwordNormal: cliente123
+        "role": "CLIENT",
+        "isActive": true,
+        "_id": "68cb50a34a8ef122d6cc9555",
+        "createdAt": "2025-09-18T00:21:55.731Z",
+        "updatedAt": "2025-09-18T00:21:55.731Z",
+        "__v": 0
+    },
+    "accessToken": "",
+    "refreshToken": ""
+}
+
+CITA:
+{
+    "clientId": "68cb50a34a8ef122d6cc9555",
+    "barberId": "68cb47b10b6ecd69713ce022",
+    "serviceId": "68cb6376fef222bfc4c743ea",
+    "startAt": "2025-09-18T13:00:00.000Z",
+    "endAt": "2025-09-18T13:30:00.000Z",
+    "status": "PENDING",
+    "origin": "WEB",
+    "_id": "68cb6b74d85dc4012a911a40",
+    "__v": 0
+}

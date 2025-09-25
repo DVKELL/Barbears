@@ -35,22 +35,20 @@ function login() {
             console.log("RESPUESTA: ", data);
 
             const userData = {
-                nombre: data.user.fullName,
-                role: data.user.role,
+                nombre: data.userLogged.user.fullName,
+                role: data.userLogged.user.role,
+                id: data.userLogged.user._id,
             };
 
-            if (userData.role === "ADMIN") {
-                localStorage.setItem("Data", JSON.stringify(userData));
-            }
-            if (userData.role === "BARBER") {
-                localStorage.setItem("Data", JSON.stringify(userData));
-            }
-            if (userData.role === "CLIENT") {
-                localStorage.setItem("Data", JSON.stringify(userData));
-            }
+                localStorage.setItem("Rol", JSON.stringify(userData.role));
+                localStorage.setItem("Nombre", JSON.stringify(userData.nombre));
+                localStorage.setItem("Id", JSON.stringify(userData.id));
+            
             setTimeout(() => {
-                location.href = "/api/v1/clients";
+                location.href = "/views/dashboard";
             }, 150);
+
+            console.log(data)
 
             return data;
         })

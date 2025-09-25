@@ -57,7 +57,30 @@ router.post(
     ]),
     asyncH(async (req, res) => {
         const result = await loginClient(req.body);
-        res.json(result);
+        
+        //result.accessToken da el token de JWT
+        //result.user.fullName y .role, dan el rol y el nombre del usuario logeadoo
+        const responseBody ={
+            token: result.accessToken,
+            user: {
+                name: result.user.fullName,
+                rol: result.user.role
+            }
+        }
+
+        // console.log(responseBody);
+        res.cookie("user_token", responseBody, {
+            //Hace que la cookie no sea accesible al javascript del cliente
+            httpOnly: true,  
+
+            //Una hora para que expire el token
+            maxAge: 3600000
+        })
+        
+        res.json({
+            userLogged: result,
+            responseBody
+        });
     })
 
     /*Enviar la cookie con res.cookie('NOMBRE DEL TOKEN', informacion que se va a guardar, {

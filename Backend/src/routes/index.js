@@ -9,43 +9,6 @@ import waitlistRoutes from "./waitlistRoutes.js";
 import authRoutes from "./authRoutes.js";
 import adminRoutes from "./adminRoutes.js";
 
-/*PRUEBA*/
-import { listServices } from "../services/serviceCatalog.service.js";
-import { listBarbers } from "../services/barber.service.js";
-
-// Prueba para validar si el server esta vivo
-router.get("/health", (_req, res) => {
-    res.json({
-        ok: true,
-        time: new Date().toISOString(),
-    });
-});
-
-//PROBANDO EL RENDER DE LAS VISTAS
-router.get("/ejs", async (_, res) => {
-    res.render("login/login");
-});
-
-//PROBANDO EL RENDER DE LA LANDING
-router.get("/", async (_, res) => {
-    const services = await listServices();
-    const barbers = await listBarbers();
-
-    const data = {
-        services,
-        barbers,
-    };
-    res.render("pages/landing", data);
-});
-
-//PROBANDO EL LOGIN
-router.get("/login", (_, res) => {
-    res.render("users/loginForm");
-});
-
-router.get("/clients", (_, res) => {
-    res.render("users/clientPage");
-});
 
 //Se accede con /admin/create/user
 router.use("/admin", adminRoutes);

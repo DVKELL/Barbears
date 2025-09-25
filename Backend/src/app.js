@@ -18,6 +18,7 @@ import cookieParser from "cookie-parser";
 
 //importar el router
 import router from "./routes/index.js";
+import viewRoutes from './ssr/viewRoutes.js';
 
 /*———————————————EJS—————————————————— */
 //Path funciona para trabajar con rutas de archivos y directorios
@@ -101,6 +102,9 @@ app.use("/api/v1/health", (_, res) => {
 });
 //todas las rutas del backend
 app.use("/api/v1", router); //Utiliza todas las rutas que esten en el router
+
+//Ruta de las vistas
+app.use('/views', viewRoutes)
 
 //Middleware de errores
 app.use(errorHandler);

@@ -9,7 +9,7 @@ export const signAccess = (user) => {
         role: user.role,
         name: user.fullName,
     };
-    const ttl = `${process.env.ACCESS_TOKEN_TTL_MIN || 15}m`;
+    const ttl = `${process.env.ACCESS_TOKEN_TTL_MIN || 60}m`;
 
     return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: ttl });
 };

@@ -1,4 +1,14 @@
-<h1>PAGINA DE <span id="showRol"></span></h1>
+<% if (data.rol === "ADMIN") { %>
+<h1>PAGINA DE ADMINISTRADOR</h1>
+<h2>Bienvenido <%=data.nombre%></h2>
 
-<h2>Bienvenido <span id="showNombre"></span></h2>
+<% } %> <% if (data.rol === "BARBER") { %>
+<h1>PAGINA DE BARBERO</h1>
+<h2>Bienvenido barbero <%=data.nombre%></h2>
+
+<% } %> <% if (data.rol === "CLIENT") { %>
+<h1>PAGINA DE CLIENTES</h1>
+<h2>Bienvenido cliente <%=data.nombre%></h2>
+
+<% } %>
 <script src="/js/clientsPage.js"></script>

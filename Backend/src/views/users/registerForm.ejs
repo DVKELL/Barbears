@@ -1,0 +1,95 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <form
+        id="registerForm"
+        class="bg-white p-8 rounded-lg shadow-md w-full max-w-md space-y-6"
+    >
+        <h2 class="text-2xl font-bold text-center text-gray-800">
+            Registro de Usuario
+        </h2>
+
+        <div>
+            <label for="dni" class="block text-sm font-medium text-gray-700"
+                >Número de cedula</label
+            >
+            <input
+                type="text"
+                id="dni"
+                name="dni"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+        </div>
+
+        <div>
+            <label
+                for="fullName"
+                class="block text-sm font-medium text-gray-700"
+                >Nombre completo</label
+            >
+            <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+        </div>
+
+        <div>
+            <label
+                for="phoneNumber"
+                class="block text-sm font-medium text-gray-700"
+                >Número telefonico</label
+            >
+            <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+        </div>
+
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"
+                >Correo electrónico</label
+            >
+            <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+        </div>
+
+        <div>
+            <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+                >Contraseña</label
+            >
+            <input
+                type="text"
+                id="password"
+                name="password"
+                required
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm relative focus:ring-indigo-500 focus:border-indigo-500"
+            />
+        </div>
+
+        <button
+            type="submit"
+            class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200"
+        >
+            Registrarse
+        </button>
+
+        <div
+            id="errorBox"
+            class="text-red-600 text-sm text-center hidden"
+        ></div>
+    </form>
+    <div id="errorBox"></div>
+</div>
+<script src="/js/registerForm.js"></script>

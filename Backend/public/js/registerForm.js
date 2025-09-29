@@ -1,8 +1,9 @@
-
 const registerForm = document.querySelector("#registerForm");
 const errorBox = document.querySelector("#errorBox");
+console.log(isLogged);
 
 const url = "http://localhost:4000/api/v1/auth/register";
+const urlAdmin = "http://localhost:4000/api/v1/admin/create/user";
 
 registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -12,14 +13,42 @@ registerForm.addEventListener("submit", async (e) => {
     const phoneNumber = e.target.phoneNumber.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const role = e.target.role.value;
+
+    if (isLogged === "ADMIN") {
+        const res = await fetch(urlAdmin, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                dni,
+                fullName,
+                phoneNumber,
+                email,
+                password,
+                role,
+            }),
+        });
+
+        console.log(res);
+
+        if (res.ok) {
+            alert("Usuario registrado exitosamente");
+        }
+        return;
+    }
 
     const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dni, fullName, phoneNumber, email, password }),
+        body: JSON.stringify({
+            dni,
+            fullName,
+            phoneNumber,
+            email,
+            password,
+        }),
     });
 
-    console.log(res);
     if (!res.ok) {
         const errDota = await res.json();
         console.warn(errDota.errors.message);

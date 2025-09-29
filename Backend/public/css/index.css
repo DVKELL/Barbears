@@ -256,6 +256,9 @@
   .hidden {
     display: none;
   }
+  .inline-block {
+    display: inline-block;
+  }
   .inline-flex {
     display: inline-flex;
   }
@@ -329,11 +332,17 @@
   .items-center {
     align-items: center;
   }
+  .justify-around {
+    justify-content: space-around;
+  }
   .justify-between {
     justify-content: space-between;
   }
   .justify-center {
     justify-content: center;
+  }
+  .justify-start {
+    justify-content: flex-start;
   }
   .gap-1 {
     gap: calc(var(--spacing) * 1);
@@ -480,9 +489,6 @@
   .object-cover {
     object-fit: cover;
   }
-  .p-0 {
-    padding: calc(var(--spacing) * 0);
-  }
   .p-1 {
     padding: calc(var(--spacing) * 1);
   }
@@ -494,6 +500,9 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
+  }
+  .px-0 {
+    padding-inline: calc(var(--spacing) * 0);
   }
   .px-0\.5 {
     padding-inline: calc(var(--spacing) * 0.5);
@@ -577,6 +586,9 @@
   }
   .text-Vinotinto {
     color: var(--color-Vinotinto);
+  }
+  .text-amber-50 {
+    color: var(--color-amber-50);
   }
   .text-black {
     color: var(--color-black);
@@ -699,6 +711,13 @@
       }
     }
   }
+  .hover\:text-Verde-Botella {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-Verde-Botella);
+      }
+    }
+  }
   .hover\:text-shadow-Vinotinto {
     &:hover {
       @media (hover: hover) {
@@ -768,6 +787,11 @@
       min-height: 400px;
     }
   }
+  .sm\:max-w-1\/6 {
+    @media (width >= 40rem) {
+      max-width: calc(1/6 * 100%);
+    }
+  }
   .sm\:max-w-full {
     @media (width >= 40rem) {
       max-width: 100%;
@@ -798,14 +822,34 @@
       padding: calc(var(--spacing) * 4);
     }
   }
+  .sm\:p-5 {
+    @media (width >= 40rem) {
+      padding: calc(var(--spacing) * 5);
+    }
+  }
   .sm\:px-1 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 1);
     }
   }
+  .sm\:px-3 {
+    @media (width >= 40rem) {
+      padding-inline: calc(var(--spacing) * 3);
+    }
+  }
   .sm\:px-4 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 4);
+    }
+  }
+  .sm\:py-1 {
+    @media (width >= 40rem) {
+      padding-block: calc(var(--spacing) * 1);
+    }
+  }
+  .sm\:py-5 {
+    @media (width >= 40rem) {
+      padding-block: calc(var(--spacing) * 5);
     }
   }
   .sm\:text-4xl {
@@ -836,9 +880,29 @@
       max-width: 70%;
     }
   }
+  .md\:max-w-\[80\%\] {
+    @media (width >= 48rem) {
+      max-width: 80%;
+    }
+  }
+  .md\:max-w-\[100\%\] {
+    @media (width >= 48rem) {
+      max-width: 100%;
+    }
+  }
+  .md\:max-w-full {
+    @media (width >= 48rem) {
+      max-width: 100%;
+    }
+  }
   .md\:justify-between {
     @media (width >= 48rem) {
       justify-content: space-between;
+    }
+  }
+  .md\:p-0 {
+    @media (width >= 48rem) {
+      padding: calc(var(--spacing) * 0);
     }
   }
   .md\:px-4 {
@@ -849,6 +913,26 @@
   .lg\:mb-10 {
     @media (width >= 64rem) {
       margin-bottom: calc(var(--spacing) * 10);
+    }
+  }
+  .lg\:w-max {
+    @media (width >= 64rem) {
+      width: max-content;
+    }
+  }
+  .lg\:max-w-0 {
+    @media (width >= 64rem) {
+      max-width: calc(var(--spacing) * 0);
+    }
+  }
+  .lg\:max-w-1\/6 {
+    @media (width >= 64rem) {
+      max-width: calc(1/6 * 100%);
+    }
+  }
+  .lg\:max-w-\[700px\] {
+    @media (width >= 64rem) {
+      max-width: 700px;
     }
   }
   .lg\:justify-around {

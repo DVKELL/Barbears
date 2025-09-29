@@ -1,4 +1,6 @@
 const logBtn = document.querySelector("#logBtn");
+const registerBtn = document.querySelector("#registerBtn");
+const userPanel = document.querySelector("#userPanel");
 
 const isLogged = JSON.parse(localStorage.getItem("Rol"));
 
@@ -22,6 +24,15 @@ function logged() {
     if (!isLogged) {
         logBtn.textContent = "Iniciar Sesión";
         return;
+    }
+
+    if (isLogged === "CLIENT" || isLogged === "BARBER") {
+        registerBtn.style.display = "none";
+    }
+
+    if (isLogged) {
+        userPanel.style.display = "flex";
+        registerBtn.textContent = "Registrar usuarios";
     }
 
     logBtn.textContent = "Cerrar Sesión";

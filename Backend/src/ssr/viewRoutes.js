@@ -5,7 +5,7 @@ import { listServices } from "../services/serviceCatalog.service.js";
 import { listBarbers } from "../services/barber.service.js";
 import authGuard from "../middlewares/authGuard.js";
 
-// Prueba para validar si el server esta vivo
+// Landing Page
 viewRoutes.get("/", async (_req, res) => {
     const services = await listServices();
     const barbers = await listBarbers();
@@ -23,7 +23,11 @@ viewRoutes.get("/login", async (_, res) => {
 });
 
 //FORMULARIO DE REGISTRO
-viewRoutes.get("/register", async (_, res) => {
+viewRoutes.get("/register", async (req, res) => {
+    const customer = req.cookies?.user_token?.user?.rol;
+    if (customer === "ADMIN") {
+        return res.render("users/registerForm", { customer });
+    }
     res.render("users/registerForm");
 });
 
